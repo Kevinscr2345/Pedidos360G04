@@ -1,0 +1,3 @@
+﻿<Project>
+  <Import Project="..\build\Pedidos360Grupo4.props" />
+</Project>

@@ -1,0 +1,32 @@
+﻿.login-container{
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    margin-top:60px;
+}
+
+.login-card{
+    width:420px;
+}
+
+.login-header {
+    background: linear-gradient(135deg,#2a7de1,#1b5fd1);
+    border-radius:12px 12px 0 0;
+}
+
+.card{
+    border:none;
+    border-radius:12px;
+    box-shadow:0 10px 25px rgba(0,0,0,0.1);
+}
+
+.btn-primary {
+    background: linear-gradient(135deg,#2a7de1,#1b5fd1);
+    border: none;
+    border-radius: 8px;
+    padding: 10px;
+}
+
+    .btn-primary:hover {
+        background: linear-gradient(135deg,#1f6fd0,#154bb0);
+    }

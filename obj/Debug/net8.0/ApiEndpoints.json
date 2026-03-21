@@ -1,0 +1,34 @@
+[
+  {
+    "ContainingType": "Pedidos360Grupo4.Controllers.ApiPedidosController",
+    "Method": "Calcular",
+    "RelativePath": "api/pedidos/calcular",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "solicitud",
+        "Type": "Pedidos360Grupo4.ViewModels.SolicitudCalculoPedido",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Pedidos360Grupo4.Controllers.ApiProductosController",
+    "Method": "Buscar",
+    "RelativePath": "api/productos/buscar",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "termino",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  }
+]

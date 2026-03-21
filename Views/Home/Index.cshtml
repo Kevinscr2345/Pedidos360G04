@@ -1,0 +1,46 @@
+﻿@{
+    ViewData["Title"] = "Inicio";
+}
+
+<div class="text-center mt-5">
+    <h1 class="display-4"></h1>
+    <p class="lead"></p>
+</div>
+
+<div class="home-container">
+
+    <h1 class="home-title">Bienvenido a Pedidos360</h1>
+
+    <div class="home-card">
+        <p>
+            <strong>Pedidos360</strong> Sistema web para la gestión de clientes, productos y pedidos.
+        </p>
+
+    </div>
+
+</div>
+
+@if (User.Identity != null && User.Identity.IsAuthenticated)
+{
+    <div class="row mt-4 justify-content-center">
+        <div class="col-md-8">
+            <div class="alert alert-info text-center">
+                Has iniciado sesión correctamente. Usa el menú superior para navegar entre los módulos del sistema.
+            </div>
+        </div>
+    </div>
+}
+else
+{
+    <div class="row mt-4 justify-content-center">
+        <div class="col-md-6">
+            <div class="card shadow-sm">
+                <div class="card-body text-center">
+                    <h4>Acceso al sistema</h4>
+                    <p>Debes iniciar sesión para acceder a las opciones protegidas.</p>
+                    <a asp-controller="Acceso" asp-action="IniciarSesion" class="btn btn-primary">Iniciar sesión</a>
+                </div>
+            </div>
+        </div>
+    </div>
+}

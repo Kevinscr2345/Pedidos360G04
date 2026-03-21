@@ -1,0 +1,29 @@
+﻿.page-tit {
+    margin-bottom: 25px;
+}
+
+.search-card {
+    background: #f8f9fa;
+    padding: 20px;
+    border-radius: 12px;
+    margin-bottom: 25px;
+    box-shadow: 0 6px 15px rgba(0,0,0,0.08);
+}
+
+.table-card {
+    background: white;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 6px 15px rgba(0,0,0,0.08);
+}
+
+.table-header {
+    background: linear-gradient(135deg,#2a7de1,#1b5fd1);
+    color: white;
+    padding: 12px 20px;
+    display: flex;
+    align-items: center;
+    font-weight: 500;
+    font-size: 16px;
+}
+

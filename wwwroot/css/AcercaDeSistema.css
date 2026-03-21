@@ -1,0 +1,22 @@
+﻿.about-container {
+    max-width: 800px;
+    margin: 40px auto;
+}
+
+.about-title {
+    text-align: center;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+    background: linear-gradient(135deg,#2a7de1,#1b5fd1);
+    margin-bottom: 25px;
+    color: white;
+    font-weight: 500;
+}
+
+.about-card {
+    background: white;
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+    line-height: 1.7;
+}

@@ -1,0 +1,72 @@
+﻿@model IEnumerable<Pedidos360Grupo4.Models.Pedido>
+
+@{
+    ViewData["Title"] = "Pedidos";
+}
+
+<h1 class="page-title">Pedidos</h1>
+
+<div class="search-card">
+    <form asp-action="Index" method="get" class="row g-2 align-items-center">
+
+        <div class="col-md-4">
+            <input type="text" name="Buscar" value="@ViewBag.CurrentFilter"
+                   class="form-control" placeholder="Buscar por cliente..." />
+        </div>
+
+        <div class="col-md-4">
+            <select name="estado" class="form-select" asp-items="@(ViewData["Estados"] as SelectList)">
+                <option value="">Buscar por estado...</option>
+            </select>
+        </div>
+
+        <div class="col-md-4 text-md-end">
+            <button type="submit" class="btn btn-success me-2">Filtrar</button>
+            <a asp-action="Index" class="btn btn-outline-secondary">Limpiar</a>
+        </div>
+    </form>
+</div>
+
+<div class="mb-3">
+    <a asp-action="Create" class="btn btn-primary">Nuevo pedido</a>
+</div>
+
+<div class="table-card">
+    <div class="table-header">
+        <img src="~/images/logo.png" height="35" />
+        <span>Lista de pedidos</span>
+    </div>
+
+    <table class="table table-hover align-middle">
+        <thead>
+            <tr>
+                <th>Número</th>
+                <th>Fecha</th>
+                <th>Cliente</th>
+                <th>Subtotal</th>
+                <th>Impuestos</th>
+                <th>Total</th>
+                <th>Estado</th>
+                <th style="min-width:120px;">Acciones</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@item.Id</td>
+                    <td>@item.Fecha.ToString("dd/MM/yyyy HH:mm")</td>
+                    <td>@item.Cliente.Nombre</td>
+                    <td>@item.Subtotal.ToString("N2")</td>
+                    <td>@item.Impuestos.ToString("N2")</td>
+                    <td><strong>@item.Total.ToString("N2")</strong></td>
+                    <td>@item.Estado</td>
+                    <td>
+                        <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-info btn-sm">Detalles</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

@@ -1,0 +1,33 @@
+﻿@model Pedidos360Grupo4.Models.Producto
+
+@{
+    ViewData["Title"] = "Eliminar producto";
+}
+
+<h1>Eliminar producto</h1>
+
+<div class="alert alert-danger">
+    ¿Estás seguro de que deseas eliminar este producto permanentemente?
+</div>
+
+<div class="card border-danger mb-3">
+    <div class="card-body text-danger">
+        <dl class="row">
+            <dt class="col-sm-3">Nombre</dt>
+            <dd class="col-sm-9">@Model.Nombre</dd>
+
+            <dt class="col-sm-3">Categoría</dt>
+            <dd class="col-sm-9">@Model.Categoria.Nombre</dd>
+
+            <dt class="col-sm-3">Precio</dt>
+            <dd class="col-sm-9">@Model.Precio</dd>
+        </dl>
+    </div>
+    <div class="card-footer bg-transparent border-danger">
+        <form asp-action="Delete">
+            <input type="hidden" asp-for="Id" />
+            <button type="submit" class="btn btn-danger">Confirmar eliminación</button>
+            <a asp-action="Index" class="btn btn-secondary">Cancelar</a>
+        </form>
+    </div>
+</div>

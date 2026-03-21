@@ -1,0 +1,78 @@
+﻿@model IEnumerable<Pedidos360Grupo4.Models.Cliente>
+
+@{
+    ViewData["Title"] = "Clientes";
+}
+
+<h1 class="page-tit">Clientes</h1>
+
+<div class="search-card">
+    <form asp-action="Index" method="get" class="row g-2 align-items-center">
+        <div class="col-md-8">
+            <input type="text" name="searchString" value="@ViewBag.CurrentFilter" class="form-control" placeholder="Buscar por nombre o cédula..." />
+        </div>
+
+        <div class="col-md-4 text-md-end">
+            <button type="submit" class="btn btn-success me-2">Buscar</button>
+            <a asp-action="Index" class="btn btn-outline-secondary">Limpiar</a>
+        </div>
+    </form>
+</div>
+
+<div class="mb-3">
+    <a asp-action="Create" class="btn btn-primary">Nuevo cliente</a>
+</div>
+
+<div class="table-card">
+    <div class="table-header">
+        <img src="~/images/Logo.png" height="35">
+        <span>Lista de clientes</span>
+    </div>
+    <table class="table table-hover align-middle">
+        <thead>
+            <tr>
+                <th>Nombre completo</th>
+                <th>Cédula</th>
+                <th>Correo electrónico</th>
+                <th>Teléfono</th>
+                <th>Dirección</th>
+                <th style="min-width:220px;">Acciones</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@item.Nombre</td>
+                    <td>@item.Cedula</td>
+                    <td>@item.Correo</td>
+                    <td>@item.Telefono</td>
+                    <td>@item.Direccion</td>
+                    <td>
+
+                        <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-info btn-sm me-1">Detalles</a>
+
+                        @if (User.IsInRole("Admin"))
+                            {
+                            <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-warning btn-sm me-1">Editar</a>
+                            <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-danger btn-sm">Eliminar</a>
+                        }
+
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+<nav class="mt-4">
+    <ul class="pagination justify-content-center">
+        @for (int i = 1; i <= ViewBag.TotalPages; i++)
+        {
+            <li class="page-item @(i == ViewBag.PageIndex ? "active" : "")">
+                <a class="page-link" href="@Url.Action("Index", new { pageNumber = i, searchString = ViewBag.CurrentFilter })">@i</a>
+            </li>
+        }
+    </ul>
+</nav>

@@ -1,0 +1,63 @@
+﻿@{
+    ViewData["Title"] = "Administración";
+}
+
+<h1 class="home-title">Panel de administración</h1>
+<p class="lead text-muted mb-4">Desde aquí el administrador puede gestionar la información principal del sistema.</p>
+
+<div class="table-card">
+    <div class="table-header">
+        <img src="~/images/logo.png" height="35" />
+        <span>Módulos del sistema</span>
+    </div>
+
+    <div class="card-body">
+        <div class="row g-3">
+            <div class="col-md-4">
+                <div class="card admin-card">
+                    <div class="card-body text-center">
+                        <h4>Clientes</h4>
+                        <p class="text-muted">Consulta, registra, edita y elimina clientes del sistema.</p>
+                        <a asp-controller="Clientes" asp-action="Index" class="btn btn-primary">Administrar clientes</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="card admin-card">
+                    <div class="card-body text-center">
+                        <h4>Productos</h4>
+                        <p class="text-muted">Gestiona el catálogo de productos, imágenes, precios, impuestos y stock.</p>
+                        <a asp-controller="Productos" asp-action="Index" class="btn btn-success">Administrar productos</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="card admin-card">
+                    <div class="card-body text-center">
+                        <h4>Pedidos</h4>
+                        <p class="text-muted">Revisa los pedidos registrados y da seguimiento al flujo del sistema.</p>
+                        <a asp-controller="Pedidos" asp-action="Index" class="btn btn-dark">Ver pedidos</a>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<div class="table-card mt-4">
+    <div class="table-header">
+        <span>Permisos del administrador</span>
+    </div>
+
+    <div class="card-body">
+        <ul class="mb-0">
+            <li>Puede acceder a todos los módulos del sistema.</li>
+            <li>Puede crear, editar y eliminar productos.</li>
+            <li>Puede eliminar clientes.</li>
+            <li>Puede supervisar el flujo general de pedidos.</li>
+        </ul>
+    </div>
+</div>
