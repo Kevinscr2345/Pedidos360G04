@@ -7,7 +7,8 @@ using Pedidos360Grupo4.Models;
 
 namespace Pedidos360Grupo4.Controllers
 {
-    [Authorize(Roles = "Admin,Vendedor")]
+    // A nivel de clase permitimos a los 3 ver el catálogo (Index y Details)
+    [Authorize(Roles = "Admin,Vendedor,Operaciones")]
     public class ProductosController : Controller
     {
         private readonly DatabaseLogic _context;
@@ -68,6 +69,8 @@ namespace Pedidos360Grupo4.Controllers
             return View(producto);
         }
 
+        // CORRECCIÓN: Vendedor NO puede crear
+        [Authorize(Roles = "Admin,Operaciones")]
         public IActionResult Create()
         {
             ViewData["CategoriaId"] = new SelectList(_context.Categorias, "Id", "Nombre");
@@ -76,9 +79,16 @@ namespace Pedidos360Grupo4.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin,Operaciones")]
         public async Task<IActionResult> Create(Producto producto, IFormFile? imagenFile)
         {
             ModelState.Remove("Categoria");
+
+            // CORRECCIÓN: Imagen obligatoria al crear según rúbrica
+            if (imagenFile == null || imagenFile.Length == 0)
+            {
+                ModelState.AddModelError("ImagenUrl", "La imagen es obligatoria al registrar un producto nuevo.");
+            }
 
             try
             {
@@ -120,6 +130,8 @@ namespace Pedidos360Grupo4.Controllers
             return View(producto);
         }
 
+        // CORRECCIÓN: Vendedor NO puede editar
+        [Authorize(Roles = "Admin,Operaciones")]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null) return NotFound();
@@ -133,6 +145,7 @@ namespace Pedidos360Grupo4.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin,Operaciones")]
         public async Task<IActionResult> Edit(int id, Producto producto, IFormFile? imagenFile)
         {
             if (id != producto.Id) return NotFound();
@@ -226,6 +239,21 @@ namespace Pedidos360Grupo4.Controllers
             }
 
             return RedirectToAction(nameof(Index));
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> GetSugerencias(string term)
+        {
+            if (string.IsNullOrWhiteSpace(term))
+                return Json(new List<object>());
+
+            var sugerencias = await _context.Productos
+                .Where(p => p.Nombre.Contains(term))
+                .Select(p => new { nombre = p.Nombre })
+                .Take(5)
+                .ToListAsync();
+
+            return Json(sugerencias);
         }
     }
 }

@@ -151,5 +151,22 @@ namespace Pedidos360Grupo4.Controllers
 
             return RedirectToAction(nameof(Index));
         }
+
+        // NUEVO: API para devolver sugerencias de búsqueda de clientes al frontend
+        [HttpGet]
+        [Authorize(Roles = "Admin,Vendedor")]
+        public async Task<IActionResult> GetSugerencias(string term)
+        {
+            if (string.IsNullOrWhiteSpace(term))
+                return Json(new List<object>());
+
+            var sugerencias = await _context.Clientes
+                .Where(c => c.Nombre.Contains(term) || c.Cedula.Contains(term))
+                .Select(c => new { nombre = c.Nombre })
+                .Take(5)
+                .ToListAsync();
+
+            return Json(sugerencias);
+        }
     }
 }

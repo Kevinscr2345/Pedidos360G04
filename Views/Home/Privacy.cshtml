@@ -2,32 +2,100 @@
     ViewData["Title"] = "Acerca del sistema";
 }
 
-<div class="about-container">
+<div class="container mt-5 about-anim">
 
-    <h1 class="about-title">Acerca del sistema</h1>
-
-    <div class="about-card">
-
-        <p>
-            <strong>Pedidos360</strong> es una aplicación web desarrollada en
-            <span class="tech">ASP.NET Core MVC</span> para la gestión de clientes,
-            productos y pedidos.
+    <!-- TÍTULO -->
+    <div class="text-center mb-5">
+        <h1 class="fw-bold" style="color:#1E88E5;">
+            <i class="bi bi-info-circle"></i> Acerca del sistema
+        </h1>
+        <p class="lead text-muted">
+            Información general sobre la aplicación Pedidos360
         </p>
+    </div>
 
-        <p>
-            Utiliza tecnologías como <span class="tech">Entity Framework Core</span>,
-            <span class="tech">SQL Server</span> e
-            <span class="tech">Identity</span> para la autenticación.
-        </p>
+    <!-- CARD PRINCIPAL -->
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card shadow-lg border-0" style="border-radius:15px;">
+                <div class="card-body p-5 text-center">
 
-        <p>
-            Este sistema forma parte de un proyecto académico y demuestra el uso de
-            <strong>
-                roles, control de acceso, manejo de errores, validaciones,
-                API, AJAX y administración de datos.
-            </strong>
-        </p>
+                    <p style="font-size:18px;">
+                        <strong>Pedidos360</strong> es una aplicación web desarrollada en
+                        <span class="badge bg-primary">ASP.NET Core MVC</span>
+                        para la gestión de clientes, productos y pedidos.
+                    </p>
 
+                    <p class="mt-3">
+                        Utiliza tecnologías como:
+                    </p>
+
+                    <!-- TECNOLOGÍAS -->
+                    <div class="d-flex justify-content-center flex-wrap gap-2 mb-3">
+
+                        <span class="badge bg-secondary">
+                            <i class="bi bi-database"></i> Entity Framework Core
+                        </span>
+
+                        <span class="badge bg-dark">
+                            <i class="bi bi-server"></i> SQL Server
+                        </span>
+
+                        <span class="badge bg-success">
+                            <i class="bi bi-shield-lock"></i> Identity
+                        </span>
+
+                    </div>
+
+                    <p class="mt-3 text-muted">
+                        Este sistema forma parte de un proyecto académico y demuestra el uso de:
+                    </p>
+
+                    <!-- FEATURES -->
+                    <div class="row text-start mt-3">
+                        <div class="col-md-6">
+                            <ul>
+                                <li>Roles y control de acceso</li>
+                                <li>Validaciones de datos</li>
+                                <li>Manejo de errores</li>
+                            </ul>
+                        </div>
+
+                        <div class="col-md-6">
+                            <ul>
+                                <li>API y AJAX</li>
+                                <li>Administración de datos</li>
+                                <li>Arquitectura MVC</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
     </div>
 
 </div>
+
+<!-- ESTILOS -->
+<style>
+    .about-anim {
+        animation: fadeUp 0.6s ease;
+    }
+
+    @@keyframes fadeUp {
+        from {
+            opacity: 0;
+            transform: translateY(20px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    .badge {
+        font-size: 14px;
+        padding: 8px 10px;
+    }
+</style>

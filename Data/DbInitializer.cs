@@ -9,7 +9,8 @@ namespace Pedidos360Grupo4.Data
             var roleManager = serviceProvider.GetRequiredService<RoleManager<IdentityRole>>();
             var userManager = serviceProvider.GetRequiredService<UserManager<IdentityUser>>();
 
-            string[] roles = { "Admin", "Vendedor" };
+            // 1. Agregamos "Operaciones" al arreglo de roles
+            string[] roles = { "Admin", "Vendedor", "Operaciones" };
 
             foreach (var role in roles)
             {
@@ -19,43 +20,31 @@ namespace Pedidos360Grupo4.Data
                 }
             }
 
-            string correoAdmin = "admin@pedidos360.com";
-            string claveAdmin = "Admin123";
+            // 2. Creamos los usuarios usando el método auxiliar para mantener el código limpio
+            await CrearUsuarioSiNoExiste(userManager, "admin@pedidos360.com", "Admin123", "Admin");
+            await CrearUsuarioSiNoExiste(userManager, "vendedor@pedidos360.com", "Vendedor123", "Vendedor");
+            await CrearUsuarioSiNoExiste(userManager, "operaciones@pedidos360.com", "Operaciones123", "Operaciones");
+        }
 
-            var usuarioAdmin = await userManager.FindByEmailAsync(correoAdmin);
-            if (usuarioAdmin == null)
+        // Método auxiliar que encapsula la lógica repetitiva de crear un usuario y asignarle un rol
+        private static async Task CrearUsuarioSiNoExiste(UserManager<IdentityUser> userManager, string correo, string clave, string rol)
+        {
+            var usuario = await userManager.FindByEmailAsync(correo);
+
+            if (usuario == null)
             {
-                usuarioAdmin = new IdentityUser
+                usuario = new IdentityUser
                 {
-                    UserName = correoAdmin,
-                    Email = correoAdmin,
+                    UserName = correo,
+                    Email = correo,
                     EmailConfirmed = true
                 };
 
-                var resultado = await userManager.CreateAsync(usuarioAdmin, claveAdmin);
+                var resultado = await userManager.CreateAsync(usuario, clave);
+
                 if (resultado.Succeeded)
                 {
-                    await userManager.AddToRoleAsync(usuarioAdmin, "Admin");
-                }
-            }
-
-            string correoVendedor = "vendedor@pedidos360.com";
-            string claveVendedor = "Vendedor123";
-
-            var usuarioVendedor = await userManager.FindByEmailAsync(correoVendedor);
-            if (usuarioVendedor == null)
-            {
-                usuarioVendedor = new IdentityUser
-                {
-                    UserName = correoVendedor,
-                    Email = correoVendedor,
-                    EmailConfirmed = true
-                };
-
-                var resultado = await userManager.CreateAsync(usuarioVendedor, claveVendedor);
-                if (resultado.Succeeded)
-                {
-                    await userManager.AddToRoleAsync(usuarioVendedor, "Vendedor");
+                    await userManager.AddToRoleAsync(usuario, rol);
                 }
             }
         }

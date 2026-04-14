@@ -5,47 +5,104 @@
     var returnUrl = ViewData["ReturnUrl"] as string;
 }
 
-<div class="login-container">
-    <div class="login-card">
-        <div class="card shadow">
-            <div class="card-header login-header text-white">
-                <h3 class="mb-0">
-                    <img src="~/images/logo.png" height="35" class="me-2">
-                    Iniciar sesión</h3>
+<div class="container d-flex justify-content-center align-items-center" style="min-height:80vh;">
+
+    <div class="col-md-5">
+
+        <div class="card shadow-lg border-0 login-anim" style="border-radius:15px;">
+
+            <!-- HEADER -->
+            <div class="card-header text-white text-center"
+                 style="background-color:#1E88E5; border-top-left-radius:15px; border-top-right-radius:15px;">
+                
+                <h4 class="mb-0">
+                    <i class="bi bi-box-arrow-in-right me-2"></i>
+                    Iniciar sesión
+                </h4>
             </div>
-            <div class="card-body">
+
+            <!-- BODY -->
+            <div class="card-body p-4">
+
                 <form asp-action="IniciarSesion" method="post">
                     <input type="hidden" name="returnUrl" value="@returnUrl" />
 
                     <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
 
+                    <!-- CORREO -->
                     <div class="mb-3">
                         <label asp-for="Correo" class="form-label"></label>
-                        <input asp-for="Correo" class="form-control" />
+                        <div class="input-group">
+                            <span class="input-group-text bg-light">
+                                <i class="bi bi-envelope-fill"></i>
+                            </span>
+                            <input asp-for="Correo" class="form-control" placeholder="Correo electrónico" />
+                        </div>
                         <span asp-validation-for="Correo" class="text-danger"></span>
                     </div>
 
+                    <!-- CONTRASEÑA -->
                     <div class="mb-3">
                         <label asp-for="Contrasena" class="form-label"></label>
-                        <input asp-for="Contrasena" class="form-control" />
+                        <div class="input-group">
+                            <span class="input-group-text bg-light">
+                                <i class="bi bi-lock-fill"></i>
+                            </span>
+                            <input asp-for="Contrasena" type="password" class="form-control" placeholder="Contraseña" />
+                        </div>
                         <span asp-validation-for="Contrasena" class="text-danger"></span>
                     </div>
 
+                    <!-- RECORDAR -->
                     <div class="form-check mb-3">
                         <input asp-for="Recordarme" class="form-check-input" />
                         <label asp-for="Recordarme" class="form-check-label"></label>
                     </div>
 
-                    <button type="submit" class="btn btn-primary w-100">Ingresar</button>
+                    <!-- BOTÓN -->
+                    <button type="submit"
+                            class="btn w-100 text-white fw-bold"
+                            style="background-color:#1E88E5; border-radius:10px;">
+                        <i class="bi bi-box-arrow-in-right me-1"></i> Ingresar
+                    </button>
+
                 </form>
             </div>
         </div>
 
+        <!-- VOLVER -->
         <div class="text-center mt-3">
-            <a asp-controller="Home" asp-action="Index" class="btn btn-secondary">Volver al inicio</a>
+            <a asp-controller="Home" asp-action="Index"
+               class="btn btn-outline-secondary">
+                <i class="bi bi-arrow-left"></i> Volver al inicio
+            </a>
         </div>
+
     </div>
 </div>
+
+<!-- ANIMACIÓN -->
+<style>
+    .login-anim {
+        animation: fadeSlide 0.6s ease;
+    }
+
+    @@keyframes fadeSlide {
+        from {
+            opacity: 0;
+            transform: translateY(20px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    .btn:hover {
+        opacity: 0.9;
+        transition: 0.3s;
+    }
+</style>
 
 @section Scripts {
     @{

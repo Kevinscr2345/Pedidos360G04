@@ -2,11 +2,10 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Pedidos360Grupo4.Data;
-using Pedidos360Grupo4.ViewModels;
 
 namespace Pedidos360Grupo4.Controllers
 {
-    [Authorize(Roles = "Admin,Vendedor")]
+    [Authorize(Roles = "Admin,Vendedor,Operaciones")]
     [ApiController]
     [Route("api/productos")]
     public class ApiProductosController : ControllerBase
@@ -18,27 +17,29 @@ namespace Pedidos360Grupo4.Controllers
             _context = context;
         }
 
+        // Se cambió el parámetro a 'q' para cumplir con la ruta /api/productos/buscar?q=...
         [HttpGet("buscar")]
-        public async Task<IActionResult> Buscar(string termino = "")
+        public async Task<IActionResult> Buscar(string q = "")
         {
             var consulta = _context.Productos
                 .Where(p => p.Activo && p.Stock > 0);
 
-            if (!string.IsNullOrWhiteSpace(termino))
+            if (!string.IsNullOrWhiteSpace(q))
             {
-                consulta = consulta.Where(p => p.Nombre.Contains(termino));
+                // Búsqueda por nombre o código (Id) según la rúbrica
+                consulta = consulta.Where(p => p.Nombre.Contains(q) || p.Id.ToString() == q);
             }
 
             var productos = await consulta
                 .OrderBy(p => p.Nombre)
-                .Take(20)
-                .Select(p => new ProductoBusquedaVM
+                .Take(10) 
+                .Select(p => new
                 {
-                    Id = p.Id,
-                    Nombre = p.Nombre,
-                    Precio = p.Precio,
-                    ImpuestoPorc = p.ImpuestoPorc,
-                    Stock = p.Stock
+                    id = p.Id,
+                    nombre = p.Nombre,
+                    precio = p.Precio,
+                    impuesto = p.ImpuestoPorc,
+                    stock = p.Stock
                 })
                 .ToListAsync();
 

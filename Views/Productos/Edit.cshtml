@@ -4,75 +4,182 @@
     ViewData["Title"] = "Editar producto";
 }
 
-<h1>Editar producto</h1>
-<hr />
+<div class="container mt-4 producto-anim">
 
-<div class="row">
-    <div class="col-md-6">
-        <form asp-action="Edit" enctype="multipart/form-data">
-            <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
-
-            <input type="hidden" asp-for="Id" />
-            <input type="hidden" asp-for="ImagenUrl" />
-
-            <div class="form-group mb-3">
-                <label asp-for="Nombre" class="control-label"></label>
-                <input asp-for="Nombre" class="form-control" />
-                <span asp-validation-for="Nombre" class="text-danger"></span>
-            </div>
-
-            <div class="form-group mb-3">
-                <label asp-for="CategoriaId" class="control-label"></label>
-                <select asp-for="CategoriaId" class="form-control" asp-items="ViewBag.CategoriaId"></select>
-                <span asp-validation-for="CategoriaId" class="text-danger"></span>
-            </div>
-
-            <div class="row">
-                <div class="col-md-6 form-group mb-3">
-                    <label asp-for="Precio" class="control-label"></label>
-                    <input asp-for="Precio" class="form-control" type="number" step="0.01" />
-                    <span asp-validation-for="Precio" class="text-danger"></span>
-                </div>
-
-                <div class="col-md-6 form-group mb-3">
-                    <label asp-for="ImpuestoPorc" class="control-label"></label>
-                    <input asp-for="ImpuestoPorc" class="form-control" type="number" step="0.01" />
-                    <span asp-validation-for="ImpuestoPorc" class="text-danger"></span>
-                </div>
-            </div>
-
-            <div class="form-group mb-3">
-                <label asp-for="Stock" class="control-label"></label>
-                <input asp-for="Stock" class="form-control" />
-                <span asp-validation-for="Stock" class="text-danger"></span>
-            </div>
-
-            <div class="form-group mb-3">
-                <label class="control-label">Cambiar imagen</label>
-                <input type="file" name="imagenFile" class="form-control" accept="image/*" />
-                @if (!string.IsNullOrEmpty(Model.ImagenUrl))
-                {
-                    <div class="mt-2">
-                        <small>Imagen actual:</small><br />
-                        <img src="@Model.ImagenUrl" style="max-height: 100px;" class="img-thumbnail" />
-                    </div>
-                }
-            </div>
-
-            <div class="form-group form-check mb-3">
-                <label class="form-check-label">
-                    <input class="form-check-input" asp-for="Activo" /> Producto activo
-                </label>
-            </div>
-
-            <button type="submit" class="btn btn-primary">Guardar cambios</button>
-            <a asp-action="Index" class="btn btn-secondary">Cancelar</a>
-        </form>
+    <!-- HEADER -->
+    <div class="mb-4">
+        <h2 class="fw-bold" style="color:#1E88E5;">
+            <i class="bi bi-pencil-square"></i> Editar producto
+        </h2>
+        <p class="text-muted">Modifica la información del producto</p>
     </div>
+
+    <div class="card shadow border-0">
+        <div class="card-body">
+
+            <form asp-action="Edit" enctype="multipart/form-data">
+
+                <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+
+                <input type="hidden" asp-for="Id" />
+                <input type="hidden" asp-for="ImagenUrl" />
+
+                <div class="row">
+
+                    <!-- IZQUIERDA -->
+                    <div class="col-md-6">
+
+                        <!-- Nombre -->
+                        <div class="mb-3">
+                            <label class="form-label">Nombre</label>
+                            <div class="input-group">
+                                <span class="input-group-text">
+                                    <i class="bi bi-tag"></i>
+                                </span>
+                                <input asp-for="Nombre" class="form-control" />
+                            </div>
+                            <span asp-validation-for="Nombre" class="text-danger"></span>
+                        </div>
+
+                        <!-- Categoría -->
+                        <div class="mb-3">
+                            <label class="form-label">Categoría</label>
+                            <select asp-for="CategoriaId"
+                                    class="form-select"
+                                    asp-items="ViewBag.CategoriaId">
+                            </select>
+                            <span asp-validation-for="CategoriaId" class="text-danger"></span>
+                        </div>
+
+                        <!-- Precio + Impuesto -->
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Precio</label>
+                                <div class="input-group">
+                                    <span class="input-group-text">₡</span>
+                                    <input asp-for="Precio" class="form-control" type="number" step="0.01" />
+                                </div>
+                                <span asp-validation-for="Precio" class="text-danger"></span>
+                            </div>
+
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Impuesto (%)</label>
+                                <input asp-for="ImpuestoPorc" class="form-control" type="number" step="0.01" />
+                                <span asp-validation-for="ImpuestoPorc" class="text-danger"></span>
+                            </div>
+                        </div>
+
+                        <!-- Stock -->
+                        <div class="mb-3">
+                            <label class="form-label">Stock</label>
+                            <input asp-for="Stock" class="form-control" />
+                            <span asp-validation-for="Stock" class="text-danger"></span>
+                        </div>
+
+                        <!-- Activo -->
+                        <div class="form-check mb-3">
+                            <input class="form-check-input" asp-for="Activo" />
+                            <label class="form-check-label">
+                                Producto activo
+                            </label>
+                        </div>
+
+                    </div>
+
+                    <!-- DERECHA -->
+                    <div class="col-md-6 text-center">
+
+                        <label class="form-label">Imagen del producto</label>
+
+                        <!-- Imagen actual -->
+                        @if (!string.IsNullOrEmpty(Model.ImagenUrl))
+                        {
+                            <div class="mb-3">
+                                <small class="text-muted">Imagen actual</small><br />
+                                <img src="@Model.ImagenUrl"
+                                     class="img-fluid rounded shadow-sm"
+                                     style="max-height:200px;" />
+                            </div>
+                        }
+
+                        <!-- Preview nueva -->
+                        <div class="border rounded p-3 mb-3">
+                            <img id="preview"
+                                 src="https://via.placeholder.com/250x200?text=Nueva+imagen"
+                                 class="img-fluid rounded" />
+                        </div>
+
+                        <input type="file"
+                               name="imagenFile"
+                               class="form-control"
+                               accept="image/*"
+                               onchange="previewImagen(event)" />
+
+                    </div>
+
+                </div>
+
+                <!-- BOTONES -->
+                <div class="d-flex justify-content-between mt-4">
+
+                    <a asp-action="Index" class="btn btn-outline-secondary">
+                        <i class="bi bi-arrow-left"></i> Cancelar
+                    </a>
+
+                    <button type="submit"
+                            class="btn text-white"
+                            style="background-color:#1E88E5;">
+                        <i class="bi bi-save"></i> Guardar cambios
+                    </button>
+
+                </div>
+
+            </form>
+
+        </div>
+    </div>
+
 </div>
 
 @section Scripts {
     @{
         await Html.RenderPartialAsync("_ValidationScriptsPartial");
     }
+
+    <script>
+        function previewImagen(event) {
+            const reader = new FileReader();
+            reader.onload = function () {
+                document.getElementById("preview").src = reader.result;
+            }
+            reader.readAsDataURL(event.target.files[0]);
+        }
+    </script>
 }
+
+<!-- ANIMACIÓN -->
+<style>
+    .producto-anim {
+        animation: fadeUp 0.4s ease;
+    }
+
+    @@keyframes fadeUp {
+        from {
+            opacity: 0;
+            transform: translateY(10px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    .input-group-text {
+        background-color: #f1f3f5;
+    }
+
+    .btn:hover {
+        opacity: 0.9;
+        transition: 0.3s;
+    }
+</style>

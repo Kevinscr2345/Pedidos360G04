@@ -4,69 +4,106 @@
     ViewData["Title"] = "Pedidos";
 }
 
-<h1 class="page-title">Pedidos</h1>
+<h1 class="page-title mb-4" style="color:var(--color-texto);">Pedidos</h1>
 
-<div class="search-card">
+<div class="search-card mb-4 shadow-sm pb-3">
     <form asp-action="Index" method="get" class="row g-2 align-items-center">
 
         <div class="col-md-4">
             <input type="text" name="Buscar" value="@ViewBag.CurrentFilter"
-                   class="form-control" placeholder="Buscar por cliente..." />
+                   class="form-control" placeholder="Buscar por cliente o # pedido..." />
         </div>
 
         <div class="col-md-4">
             <select name="estado" class="form-select" asp-items="@(ViewData["Estados"] as SelectList)">
-                <option value="">Buscar por estado...</option>
+                <option value="">-- Buscar por estado --</option>
             </select>
         </div>
 
         <div class="col-md-4 text-md-end">
-            <button type="submit" class="btn btn-success me-2">Filtrar</button>
+            <button type="submit" class="btn btn-success me-2">
+                <i class="bi bi-funnel"></i> Filtrar
+            </button>
             <a asp-action="Index" class="btn btn-outline-secondary">Limpiar</a>
         </div>
     </form>
 </div>
 
-<div class="mb-3">
-    <a asp-action="Create" class="btn btn-primary">Nuevo pedido</a>
+<div class="mb-3 mt-4">
+    <a asp-action="Create" class="btn btn-primary shadow-sm">
+        <i class="bi bi-plus-circle"></i> Nuevo pedido
+    </a>
 </div>
 
-<div class="table-card">
-    <div class="table-header">
-        <img src="~/images/logo.png" height="35" />
+<div class="card shadow border-0 table-card mt-3">
+    <div class="card-header text-white" style="background-color:#1E88E5;">
+        <img src="~/images/logo.png" height="35" class="me-2" />
         <span>Lista de pedidos</span>
     </div>
 
-    <table class="table table-hover align-middle">
-        <thead>
-            <tr>
-                <th>Número</th>
-                <th>Fecha</th>
-                <th>Cliente</th>
-                <th>Subtotal</th>
-                <th>Impuestos</th>
-                <th>Total</th>
-                <th>Estado</th>
-                <th style="min-width:120px;">Acciones</th>
-            </tr>
-        </thead>
-
-        <tbody>
-            @foreach (var item in Model)
-            {
+    <div class="table-responsive">
+        <table id="pedidosTable" class="table table-hover align-middle display responsive nowrap mb-0" style="width:100%">
+            <thead style="background-color:#E3F2FD;">
                 <tr>
-                    <td>@item.Id</td>
-                    <td>@item.Fecha.ToString("dd/MM/yyyy HH:mm")</td>
-                    <td>@item.Cliente.Nombre</td>
-                    <td>@item.Subtotal.ToString("N2")</td>
-                    <td>@item.Impuestos.ToString("N2")</td>
-                    <td><strong>@item.Total.ToString("N2")</strong></td>
-                    <td>@item.Estado</td>
-                    <td>
-                        <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-info btn-sm">Detalles</a>
-                    </td>
+                    <th>Número</th>
+                    <th>Fecha</th>
+                    <th>Cliente</th>
+                    <th>Subtotal</th>
+                    <th>Impuestos</th>
+                    <th>Total</th>
+                    <th>Estado</th>
+                    <th style="min-width:120px;">Acciones</th>
                 </tr>
-            }
-        </tbody>
-    </table>
+            </thead>
+
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td class="fw-bold">#@item.Id</td>
+                        <td>@item.Fecha.ToString("dd/MM/yyyy HH:mm")</td>
+                        <td>@item.Cliente.Nombre</td>
+                        <td>₡ @item.Subtotal.ToString("N2")</td>
+                        <td>₡ @item.Impuestos.ToString("N2")</td>
+                        <td class="text-success fw-bold">₡ @item.Total.ToString("N2")</td>
+                        <td>
+                            <span class="badge @(item.Estado == "Completado" ? "bg-success" : item.Estado == "En Proceso" ? "bg-warning text-dark" : item.Estado == "Cancelado" ? "bg-danger" : "bg-secondary")">
+                                @item.Estado
+                            </span>
+                        </td>
+                        <td>
+                            <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-sm btn-info text-white shadow-sm">
+                                <i class="bi bi-eye"></i> Detalles
+                            </a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
 </div>
+
+<style>
+    /* 1. Separación entre el header azul y los controles (Mostrar N / Buscar) */
+    .dataTables_wrapper .dataTables_length,
+    .dataTables_wrapper .dataTables_filter {
+        padding-top: 1.25rem; /* Espacio arriba */
+        padding-bottom: 0.75rem; /* Espacio abajo */
+        padding-left: 1.25rem; /* Margen lateral izquierdo */
+        padding-right: 1.25rem; /* Margen lateral derecho */
+    }
+
+    /* 2. Separación entre los controles y el encabezado de la tabla (thead) */
+    table.dataTable {
+        margin-top: 5px !important;
+        margin-bottom: 15px !important;
+    }
+
+    /* 3. Espaciado inferior para la zona de paginación (Opcional pero recomendado para simetría) */
+    .dataTables_wrapper .dataTables_info,
+    .dataTables_wrapper .dataTables_paginate {
+        padding-bottom: 1.25rem;
+        padding-left: 1.25rem;
+        padding-right: 1.25rem;
+    }
+</style>

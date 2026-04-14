@@ -5,111 +5,139 @@
     ViewData["Title"] = "Productos";
 }
 
-<h1 class="page-title">Productos</h1>
+<h1 class="page-title mb-4">
+    <i class="bi bi-box-seam"></i> Productos
+</h1>
 
-<div class="search-card">
-    <form asp-action="Index" method="get" class="row g-2 align-items-center">
+<div class="card shadow-sm border-0 mb-4 fade-in">
+    <div class="card-body">
+        <form asp-action="Index" method="get" class="row g-2 align-items-center">
 
-        <div class="col-md-4">
-            <input type="text" name="searchString" value="@ViewBag.CurrentFilter"
-                   class="form-control" placeholder="Buscar producto..." />
-        </div>
+            <div class="col-md-4">
+                <input type="text" name="searchString" id="searchInput" value="@ViewBag.CurrentFilter"
+                       class="form-control" autocomplete="off" list="listaSugerencias"
+                       placeholder="🔍 Buscar producto..." />
+                <datalist id="listaSugerencias"></datalist>
+            </div>
 
-        <div class="col-md-4">
-            <select name="categoriaId" class="form-select" asp-items="@(ViewData["Categorias"] as SelectList)">
-            <option value="">-- Todas las categorías --</option>
-            </select>
-        </div>
+            <div class="col-md-4">
+                <select name="categoriaId" class="form-select"
+                        asp-items="@(ViewData["Categorias"] as SelectList)">
+                    <option value="">📂 Todas las categorías</option>
+                </select>
+            </div>
 
-        <div class="col-md-4 text-md-end">
-            <button type="submit" class="btn btn-success me-2">Filtrar</button>
-            <a asp-action="Index" class="btn btn-outline-secondary">Limpiar</a>
-        </div>
-    </form>
+            <div class="col-md-4 text-md-end">
+                <button type="submit" class="btn btn-success me-2">
+                    <i class="bi bi-funnel"></i> Filtrar
+                </button>
+
+                <a asp-action="Index" class="btn btn-outline-secondary">
+                    <i class="bi bi-x-circle"></i> Limpiar
+                </a>
+            </div>
+        </form>
+    </div>
 </div>
 
 @if (User.IsInRole("Admin"))
 {
     <div class="mb-3">
-        <a asp-action="Create" class="btn btn-primary">Nuevo producto</a>
+        <a asp-action="Create" class="btn btn-primary shadow-sm">
+            <i class="bi bi-plus-circle"></i> Nuevo producto
+        </a>
     </div>
 }
 
-<div class="table-card">
-
-    <div class="table-header">
-        <img src="~/images/logo.png" height="35" />
-        <span>Lista de productos</span>
+<div class="card shadow border-0 fade-in">
+    <div class="card-header text-white d-flex align-items-center"
+         style="background-color:#1E88E5;">
+        <img src="~/images/logo.png" height="35" class="me-2" />
+        <span class="fw-semibold">Lista de productos</span>
     </div>
 
-    <table class="table table-hover align-middle">
-        <thead >
-            <tr>
-                <th>Imagen</th>
-                <th>Nombre</th>
-                <th>Categoría</th>
-                <th>Precio</th>
-                <th>Impuesto (%)</th>
-                <th>Stock</th>
-                <th>Estado</th>
-                <th style="min-width:220px;">Acciones</th>
-            </tr>
-        </thead>
-
-        <tbody>
-
-            @foreach (var item in Model)
-            {
+    <div class="table-responsive">
+        <table class="table table-hover align-middle mb-0">
+            <thead style="background-color:#E3F2FD;">
                 <tr>
-                    <td style="width:100px;text-align:center;">
-                        @if (!string.IsNullOrEmpty(item.ImagenUrl))
-                        {
-                            <img src="@item.ImagenUrl" class="img-thumbnail"
-                                 style="height:60px;width:60px;object-fit:cover;" />
-                        }
-                        else
-                        {
-                            <span class="text-muted small">Sin imagen</span>
-                        }
-                    </td>
+                    <th>Imagen</th>
+                    <th>Nombre</th>
+                    <th>Categoría</th>
+                    <th>Precio</th>
+                    <th>Impuesto</th>
+                    <th>Stock</th>
+                    <th>Estado</th>
+                    <th style="min-width:220px;">Acciones</th>
+                </tr>
+            </thead>
 
-                    <td>@item.Nombre</td>
-                    <td>@item.Categoria.Nombre</td>
-                    <td> ₡ @item.Precio.ToString("N2")</td>
-                    <td>@item.ImpuestoPorc.ToString("P0")</td>
-                    <td>@item.Stock</td>
-                    <td>
-                        @if (item.Activo)
-                        {
-                            <span class="badge bg-success">Activo</span>
-                        }
-                        else
-                        {
-                            <span class="badge bg-secondary">Inactivo</span>
-                        }
-                    </td>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr class="table-row-hover">
+                        <td style="width:100px;text-align:center;">
+                            @if (!string.IsNullOrEmpty(item.ImagenUrl))
+                            {
+                               <img src="@item.ImagenUrl"
+                                     class="img-thumbnail shadow-sm"
+                                     style="height:60px;width:60px;object-fit:cover;" />
+                            }
+                            else
+                            {
+                                <span class="text-muted small">Sin imagen</span>
+                            }
+                        </td>
 
-                    <td>
+                        <td class="fw-semibold">@item.Nombre</td>
+                        <td>@item.Categoria.Nombre</td>
+                        <td>₡ @item.Precio.ToString("N2")</td>
+                        
+                        <td>@item.ImpuestoPorc.ToString("N0") %</td>
+                        
+                        <td>@item.Stock</td>
 
-                        <a asp-action="Details"
+                        <td>
+                            @if (item.Activo)
+                            {
+                                <span class="badge bg-success">
+                                    <i class="bi bi-check-circle"></i> Activo
+                                </span>
+                            }
+                            else
+                            {
+                                <span class="badge bg-secondary">
+                                     <i class="bi bi-x-circle"></i> Inactivo
+                                </span>
+                            }
+                        </td>
+
+                        <td>
+                            <a asp-action="Details"
                                asp-route-id="@item.Id"
                                class="btn btn-info btn-sm me-1">
-                            Detalles
-                        </a>
+                                <i class="bi bi-eye"></i>
+                            </a>
 
-                        @if (User.IsInRole("Admin"))
-                        {
-                            <a asp-action="Edit" asp-route-id="@item.Id"
-                               class="btn btn-warning btn-sm me-1">Editar</a>
+                            @if (User.IsInRole("Admin"))
+                            {
+                                <a asp-action="Edit"
+                                   asp-route-id="@item.Id"
+                                   class="btn btn-warning btn-sm me-1">
+                                    <i class="bi bi-pencil"></i>
+                                </a>
 
-                            <a asp-action="Delete" asp-route-id="@item.Id"
-                                class="btn btn-danger btn-sm">Eliminar</a>
-                        }
-                    </td>
-                </tr>
-            }
-        </tbody>
-    </table>
+                                <a asp-action="Delete"
+                                   asp-route-id="@item.Id"
+                                   class="btn btn-danger btn-sm">
+                                    <i class="bi bi-trash"></i>
+                                </a>
+                            }
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
 </div>
 
 <nav class="mt-4">
@@ -117,8 +145,72 @@
         @for (int i = 1; i <= ViewBag.TotalPages; i++)
         {
             <li class="page-item @(i == ViewBag.PageIndex ? "active" : "")">
-                <a class="page-link" href="@Url.Action("Index",new{pageNumber = i,searchString = ViewBag.CurrentFilter,categoriaId = ViewBag.CurrentCategory})">@i</a>
+                <a class="page-link"
+                   href="@Url.Action("Index", new {
+                        pageNumber = i,
+                        searchString = ViewBag.CurrentFilter,
+                        categoriaId = ViewBag.CurrentCategory
+                   })">@i</a>
             </li>
         }
     </ul>
 </nav>
+
+<style>
+    .fade-in { animation: fadeIn 0.6s ease-in-out; }
+
+    @@keyframes fadeIn {
+        from { opacity: 0; transform: translateY(10px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+
+    .table-row-hover:hover {
+        background-color: #E3F2FD;
+        transition: 0.2s;
+    }
+
+    .page-item.active .page-link {
+        background-color: #1E88E5;
+        border-color: #1E88E5;
+    }
+
+    .page-link { color: #1E88E5; }
+
+    .page-link:hover {
+        background-color: #64B5F6;
+        color: white;
+    }
+</style>
+
+@section Scripts {
+    <script>
+        const searchInput = document.getElementById('searchInput');
+        const listaSugerencias = document.getElementById('listaSugerencias');
+
+        searchInput.addEventListener('input', async function () {
+            const term = this.value;
+            
+            // Buscar solo a partir de 2 caracteres
+            if (term.length < 2) {
+                listaSugerencias.innerHTML = '';
+                return;
+            }
+
+            try {
+                const response = await fetch(`/Productos/GetSugerencias?term=${encodeURIComponent(term)}`);
+                if (response.ok) {
+                    const data = await response.json();
+                    listaSugerencias.innerHTML = '';
+                    
+                    data.forEach(item => {
+                        const option = document.createElement('option');
+                        option.value = item.nombre;
+                        listaSugerencias.appendChild(option);
+                    });
+                }
+            } catch (error) {
+                console.error('Error fetching suggestions:', error);
+            }
+        });
+    </script>
+}

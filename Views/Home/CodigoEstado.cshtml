@@ -2,11 +2,61 @@
     ViewData["Title"] = "Error del sistema";
 }
 
-<div class="text-center mt-5">
-    <h1 class="text-danger">Error @ViewBag.Codigo</h1>
-    <p class="lead">@ViewBag.Mensaje</p>
+<div class="container d-flex justify-content-center align-items-center" style="min-height:80vh;">
 
-    <a asp-controller="Home" asp-action="Index" class="btn btn-primary">
-        Volver al inicio
-    </a>
+    <div class="col-md-6">
+
+        <div class="card shadow-lg border-0 text-center error-anim" style="border-radius:15px;">
+
+            <div class="card-body p-5">
+
+                <!-- ICONO -->
+                <i class="bi bi-exclamation-triangle-fill"
+                   style="font-size:60px; color:#D32F2F;"></i>
+
+                <!-- CÓDIGO -->
+                <h1 class="mt-3 fw-bold" style="color:#D32F2F;">
+                    Error @ViewBag.Codigo
+                </h1>
+
+                <!-- MENSAJE -->
+                <p class="lead text-muted">
+                    @ViewBag.Mensaje
+                </p>
+
+                <!-- BOTÓN -->
+                <a asp-controller="Home" asp-action="Index"
+                   class="btn mt-3 text-white px-4"
+                   style="background-color:#1E88E5; border-radius:10px;">
+                    
+                    <i class="bi bi-house-door"></i> Volver al inicio
+                </a>
+
+            </div>
+        </div>
+
+    </div>
 </div>
+
+<!-- ESTILOS -->
+<style>
+    .error-anim {
+        animation: fadeScale 0.5s ease;
+    }
+
+    @@keyframes fadeScale {
+        from {
+            opacity: 0;
+            transform: scale(0.9);
+        }
+        to {
+            opacity: 1;
+            transform: scale(1);
+        }
+    }
+
+    .btn:hover {
+        opacity: 0.9;
+        transition: 0.3s;
+    }
+</style>

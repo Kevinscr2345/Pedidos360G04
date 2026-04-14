@@ -4,30 +4,88 @@
     ViewData["Title"] = "Eliminar producto";
 }
 
-<h1>Eliminar producto</h1>
+<div class="container mt-5 eliminar-anim">
 
-<div class="alert alert-danger">
-    ¿Estás seguro de que deseas eliminar este producto permanentemente?
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+
+            <!-- ALERTA -->
+            <div class="alert alert-danger text-center shadow-sm">
+                <h4 class="mb-2">
+                    <i class="bi bi-exclamation-triangle-fill"></i> Atención
+                </h4>
+                <p class="mb-0">
+                    Esta acción eliminará el producto de forma permanente.
+                </p>
+            </div>
+
+            <!-- CARD -->
+            <div class="card shadow border-0">
+
+                <div class="card-header text-white text-center"
+                     style="background-color:#dc3545;">
+                    <i class="bi bi-trash"></i> Confirmar eliminación
+                </div>
+
+                <div class="card-body">
+
+                    <dl class="row">
+
+                        <dt class="col-sm-4">Nombre</dt>
+                        <dd class="col-sm-8 fw-semibold">@Model.Nombre</dd>
+
+                        <dt class="col-sm-4">Categoría</dt>
+                        <dd class="col-sm-8">@Model.Categoria.Nombre</dd>
+
+                        <dt class="col-sm-4">Precio</dt>
+                        <dd class="col-sm-8">₡ @Model.Precio.ToString("N2")</dd>
+
+                    </dl>
+
+                </div>
+
+                <div class="card-footer bg-light d-flex justify-content-between">
+
+                    <a asp-action="Index" class="btn btn-outline-secondary">
+                        <i class="bi bi-arrow-left"></i> Cancelar
+                    </a>
+
+                    <form asp-action="Delete">
+                        <input type="hidden" asp-for="Id" />
+
+                        <button type="submit" class="btn btn-danger">
+                            <i class="bi bi-trash"></i> Eliminar
+                        </button>
+                    </form>
+
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+
 </div>
 
-<div class="card border-danger mb-3">
-    <div class="card-body text-danger">
-        <dl class="row">
-            <dt class="col-sm-3">Nombre</dt>
-            <dd class="col-sm-9">@Model.Nombre</dd>
+<!-- ANIMACIÓN -->
+<style>
+    .eliminar-anim {
+        animation: fadeScale 0.3s ease;
+    }
 
-            <dt class="col-sm-3">Categoría</dt>
-            <dd class="col-sm-9">@Model.Categoria.Nombre</dd>
+    @@keyframes fadeScale {
+        from {
+            opacity: 0;
+            transform: scale(0.95);
+        }
+        to {
+            opacity: 1;
+            transform: scale(1);
+        }
+    }
 
-            <dt class="col-sm-3">Precio</dt>
-            <dd class="col-sm-9">@Model.Precio</dd>
-        </dl>
-    </div>
-    <div class="card-footer bg-transparent border-danger">
-        <form asp-action="Delete">
-            <input type="hidden" asp-for="Id" />
-            <button type="submit" class="btn btn-danger">Confirmar eliminación</button>
-            <a asp-action="Index" class="btn btn-secondary">Cancelar</a>
-        </form>
-    </div>
-</div>
+    .btn:hover {
+        opacity: 0.9;
+        transition: 0.3s;
+    }
+</style>

@@ -4,28 +4,87 @@
     ViewData["Title"] = "Detalles del cliente";
 }
 
-<h1>Detalles del cliente</h1>
+<div class="container mt-4 cliente-anim">
 
-<div class="card">
-    <div class="card-body">
-        <dl class="row">
-            <dt class="col-sm-3">Nombre completo</dt>
-            <dd class="col-sm-9">@Model.Nombre</dd>
-
-            <dt class="col-sm-3">Cédula</dt>
-            <dd class="col-sm-9">@Model.Cedula</dd>
-
-            <dt class="col-sm-3">Correo electrónico</dt>
-            <dd class="col-sm-9">@Model.Correo</dd>
-
-            <dt class="col-sm-3">Teléfono</dt>
-            <dd class="col-sm-9">@Model.Telefono</dd>
-
-            <dt class="col-sm-3">Dirección</dt>
-            <dd class="col-sm-9">@Model.Direccion</dd>
-        </dl>
-
-        <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-warning">Editar</a>
-        <a asp-action="Index" class="btn btn-secondary">Volver</a>
+    <!-- TÍTULO -->
+    <div class="text-center mb-4">
+        <h2 class="fw-bold" style="color:#1E88E5;">
+            <i class="bi bi-person-lines-fill"></i> Detalles del cliente
+        </h2>
     </div>
+
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+
+            <div class="card shadow-lg border-0" style="border-radius:15px;">
+
+                <div class="card-body p-4 text-center">
+
+                    <!-- ICONO PERFIL -->
+                    <i class="bi bi-person-circle"
+                       style="font-size:70px; color:#1E88E5;"></i>
+
+                    <h4 class="mt-2">@Model.Nombre</h4>
+                    <p class="text-muted">Cliente registrado</p>
+
+                    <hr />
+
+                    <!-- DATOS -->
+                    <div class="text-start">
+
+                        <p><strong><i class="bi bi-credit-card"></i> Cédula:</strong><br /> @Model.Cedula</p>
+
+                        <p><strong><i class="bi bi-envelope"></i> Correo:</strong><br /> @Model.Correo</p>
+
+                        <p><strong><i class="bi bi-telephone"></i> Teléfono:</strong><br /> @Model.Telefono</p>
+
+                        <p><strong><i class="bi bi-geo-alt"></i> Dirección:</strong><br /> @Model.Direccion</p>
+
+                    </div>
+
+                    <!-- BOTONES -->
+                    <div class="d-flex justify-content-between mt-4">
+
+                        <a asp-action="Index" class="btn btn-outline-secondary">
+                            <i class="bi bi-arrow-left"></i> Volver
+                        </a>
+
+                        <a asp-action="Edit" asp-route-id="@Model.Id"
+                           class="btn text-white"
+                           style="background-color:#1E88E5;">
+                            <i class="bi bi-pencil-square"></i> Editar
+                        </a>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+
 </div>
+
+<!-- ESTILOS -->
+<style>
+    .cliente-anim {
+        animation: fadeUp 0.5s ease;
+    }
+
+    @@keyframes fadeUp {
+        from {
+            opacity: 0;
+            transform: translateY(15px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    .btn:hover {
+        opacity: 0.9;
+        transition: 0.3s;
+    }
+</style>

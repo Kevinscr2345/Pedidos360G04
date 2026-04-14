@@ -2,62 +2,132 @@
     ViewData["Title"] = "Administración";
 }
 
-<h1 class="home-title">Panel de administración</h1>
-<p class="lead text-muted mb-4">Desde aquí el administrador puede gestionar la información principal del sistema.</p>
+<div class="container mt-4 admin-anim">
 
-<div class="table-card">
-    <div class="table-header">
-        <img src="~/images/logo.png" height="35" />
-        <span>Módulos del sistema</span>
+    <!-- TÍTULO -->
+    <div class="text-center mb-5">
+        <h1 class="fw-bold" style="color:#1E88E5;">
+            <i class="bi bi-speedometer2"></i> Panel de administración
+        </h1>
+        <p class="lead text-muted">
+            Desde aquí el administrador puede gestionar la información principal del sistema.
+        </p>
     </div>
 
-    <div class="card-body">
-        <div class="row g-3">
-            <div class="col-md-4">
-                <div class="card admin-card">
-                    <div class="card-body text-center">
-                        <h4>Clientes</h4>
-                        <p class="text-muted">Consulta, registra, edita y elimina clientes del sistema.</p>
-                        <a asp-controller="Clientes" asp-action="Index" class="btn btn-primary">Administrar clientes</a>
-                    </div>
+    <!-- MÓDULOS -->
+    <div class="row g-4">
+
+        <!-- CLIENTES -->
+        <div class="col-md-4">
+            <div class="card shadow border-0 admin-card h-100">
+                <div class="card-body text-center p-4">
+
+                    <i class="bi bi-people-fill" style="font-size:40px; color:#1E88E5;"></i>
+
+                    <h4 class="mt-3">Clientes</h4>
+                    <p class="text-muted">
+                        Consulta, registra, edita y elimina clientes del sistema.
+                    </p>
+
+                    <a asp-controller="Clientes" asp-action="Index"
+                       class="btn w-100 text-white"
+                       style="background-color:#1E88E5;">
+                        <i class="bi bi-arrow-right-circle"></i> Administrar
+                    </a>
+
                 </div>
             </div>
+        </div>
 
-            <div class="col-md-4">
-                <div class="card admin-card">
-                    <div class="card-body text-center">
-                        <h4>Productos</h4>
-                        <p class="text-muted">Gestiona el catálogo de productos, imágenes, precios, impuestos y stock.</p>
-                        <a asp-controller="Productos" asp-action="Index" class="btn btn-success">Administrar productos</a>
-                    </div>
+        <!-- PRODUCTOS -->
+        <div class="col-md-4">
+            <div class="card shadow border-0 admin-card h-100">
+                <div class="card-body text-center p-4">
+
+                    <i class="bi bi-box-seam" style="font-size:40px; color:#1E88E5;"></i>
+
+                    <h4 class="mt-3">Productos</h4>
+                    <p class="text-muted">
+                        Gestiona catálogo, precios, impuestos y stock.
+                    </p>
+
+                    <a asp-controller="Productos" asp-action="Index"
+                       class="btn w-100 text-white"
+                       style="background-color:#1E88E5;">
+                        <i class="bi bi-arrow-right-circle"></i> Administrar
+                    </a>
+
                 </div>
             </div>
+        </div>
 
-            <div class="col-md-4">
-                <div class="card admin-card">
-                    <div class="card-body text-center">
-                        <h4>Pedidos</h4>
-                        <p class="text-muted">Revisa los pedidos registrados y da seguimiento al flujo del sistema.</p>
-                        <a asp-controller="Pedidos" asp-action="Index" class="btn btn-dark">Ver pedidos</a>
-                    </div>
+        <!-- PEDIDOS -->
+        <div class="col-md-4">
+            <div class="card shadow border-0 admin-card h-100">
+                <div class="card-body text-center p-4">
+
+                    <i class="bi bi-bag-check-fill" style="font-size:40px; color:#1E88E5;"></i>
+
+                    <h4 class="mt-3">Pedidos</h4>
+                    <p class="text-muted">
+                        Revisa pedidos y da seguimiento al flujo del sistema.
+                    </p>
+
+                    <a asp-controller="Pedidos" asp-action="Index"
+                       class="btn w-100 text-white"
+                       style="background-color:#1E88E5;">
+                        <i class="bi bi-arrow-right-circle"></i> Ver pedidos
+                    </a>
+
                 </div>
             </div>
+        </div>
 
+    </div>
+
+    <!-- PERMISOS -->
+    <div class="card shadow border-0 mt-5">
+        <div class="card-header text-white"
+             style="background-color:#1E88E5; border-radius:10px 10px 0 0;">
+            <i class="bi bi-shield-lock"></i> Permisos del administrador
+        </div>
+
+        <div class="card-body">
+            <ul class="mb-0">
+                <li>Acceso completo a todos los módulos del sistema.</li>
+                <li>Gestión total de productos.</li>
+                <li>Eliminación de clientes.</li>
+                <li>Supervisión del flujo de pedidos.</li>
+            </ul>
         </div>
     </div>
+
 </div>
 
-<div class="table-card mt-4">
-    <div class="table-header">
-        <span>Permisos del administrador</span>
-    </div>
+<!-- ESTILOS -->
+<style>
+    .admin-card {
+        border-radius: 15px;
+        transition: all 0.3s ease;
+    }
 
-    <div class="card-body">
-        <ul class="mb-0">
-            <li>Puede acceder a todos los módulos del sistema.</li>
-            <li>Puede crear, editar y eliminar productos.</li>
-            <li>Puede eliminar clientes.</li>
-            <li>Puede supervisar el flujo general de pedidos.</li>
-        </ul>
-    </div>
-</div>
+    .admin-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+    }
+
+    .admin-anim {
+        animation: fadeUp 0.6s ease;
+    }
+
+    @@keyframes fadeUp {
+        from {
+            opacity: 0;
+            transform: translateY(20px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+</style>

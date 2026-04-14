@@ -4,29 +4,83 @@
     ViewData["Title"] = "Eliminar cliente";
 }
 
-<h1>Eliminar cliente</h1>
+<div class="container d-flex justify-content-center align-items-center" style="min-height:80vh;">
 
-<div class="alert alert-danger">
-    ¿Estás seguro de que deseas eliminar este cliente?
-</div>
+    <div class="col-md-6 delete-anim">
 
-<div class="card border-danger">
-    <div class="card-body">
-        <dl class="row">
-            <dt class="col-sm-3">Nombre completo</dt>
-            <dd class="col-sm-9">@Model.Nombre</dd>
+        <!-- CARD -->
+        <div class="card shadow-lg border-0" style="border-radius:15px;">
 
-            <dt class="col-sm-3">Cédula</dt>
-            <dd class="col-sm-9">@Model.Cedula</dd>
+            <div class="card-body p-4 text-center">
 
-            <dt class="col-sm-3">Correo electrónico</dt>
-            <dd class="col-sm-9">@Model.Correo</dd>
-        </dl>
+                <!-- ICONO -->
+                <i class="bi bi-exclamation-triangle-fill"
+                   style="font-size:60px; color:#D32F2F;"></i>
 
-        <form asp-action="Delete">
-            <input type="hidden" asp-for="Id" />
-            <button type="submit" class="btn btn-danger">Confirmar eliminación</button>
-            <a asp-action="Index" class="btn btn-secondary">Cancelar</a>
-        </form>
+                <!-- TITULO -->
+                <h3 class="mt-3 fw-bold" style="color:#D32F2F;">
+                    Eliminar cliente
+                </h3>
+
+                <p class="text-muted">
+                    Esta acción no se puede deshacer.
+                </p>
+
+                <!-- DATOS -->
+                <div class="card mt-3 border-0 bg-light">
+                    <div class="card-body text-start">
+
+                        <p><strong>Nombre:</strong> @Model.Nombre</p>
+                        <p><strong>Cédula:</strong> @Model.Cedula</p>
+                        <p><strong>Correo:</strong> @Model.Correo</p>
+
+                    </div>
+                </div>
+
+                <!-- BOTONES -->
+                <form asp-action="Delete" class="mt-4">
+
+                    <input type="hidden" asp-for="Id" />
+
+                    <div class="d-flex justify-content-between">
+
+                        <a asp-action="Index" class="btn btn-outline-secondary">
+                            <i class="bi bi-arrow-left"></i> Cancelar
+                        </a>
+
+                        <button type="submit" class="btn btn-danger">
+                            <i class="bi bi-trash"></i> Confirmar eliminación
+                        </button>
+
+                    </div>
+
+                </form>
+
+            </div>
+        </div>
+
     </div>
 </div>
+
+<!-- ESTILOS -->
+<style>
+    .delete-anim {
+        animation: fadeScale 0.4s ease;
+    }
+
+    @@keyframes fadeScale {
+        from {
+            opacity: 0;
+            transform: scale(0.95);
+        }
+        to {
+            opacity: 1;
+            transform: scale(1);
+        }
+    }
+
+    .btn:hover {
+        opacity: 0.9;
+        transition: 0.3s;
+    }
+</style>

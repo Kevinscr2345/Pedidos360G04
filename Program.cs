@@ -46,7 +46,8 @@ if (!app.Environment.IsDevelopment())
     app.UseHsts();
 }
 
-app.UseStatusCodePagesWithReExecute("/Home/CodigoEstado", "?code={0}");
+// CORRECCIÓN: Middleware para atrapar errores 404 y 500 personalizados
+app.UseStatusCodePagesWithReExecute("/Home/Error", "?statusCode={0}");
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();

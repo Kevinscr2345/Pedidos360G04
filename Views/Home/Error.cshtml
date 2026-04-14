@@ -1,13 +1,55 @@
-﻿@{
+﻿@model ErrorViewModel
+@{
     ViewData["Title"] = "Error";
+    var statusCode = ViewBag.StatusCode as int?;
 }
 
-<h1 style="color:red;">Error 500 - Error interno del servidor</h1>
+<div class="container text-center mt-5 error-anim">
 
-<p>
-    Ocurrió un error inesperado en el sistema.
-</p>
+    @if (statusCode == 404)
+    {
+        <h1 class="display-1 fw-bold text-primary">404</h1>
+        <h2 class="mb-4">¡Página no encontrada!</h2>
+        <p class="text-muted mb-4">Lo sentimos, la página o el recurso que estás buscando no existe, ha sido movido o no tienes acceso.</p>
+        <img src="https://cdn-icons-png.flaticon.com/512/755/755014.png" alt="404" width="150" class="mb-4 opacity-50" />
+    }
+    else
+    {
+        <h1 class="display-1 fw-bold text-danger">¡Oops!</h1>
+        <h2 class="mb-4">Algo salió mal</h2>
+        <p class="text-muted mb-4">Ocurrió un error interno en el sistema al procesar tu solicitud. Nuestro equipo técnico ya ha sido notificado.</p>
+        <i class="bi bi-exclamation-triangle-fill text-danger" style="font-size: 6rem;"></i>
 
-<p>
-    Por favor, inténtelo nuevamente más tarde.
-</p>
+        @if (Model != null && Model.ShowRequestId)
+        {
+            <div class="alert alert-secondary mt-4 d-inline-block text-start">
+                <strong>ID de la solicitud (Tracking):</strong> <code>@Model.RequestId</code>
+            </div>
+        }
+    }
+
+    <div class="mt-5">
+        <a asp-controller="Home" asp-action="Index" class="btn btn-primary btn-lg shadow-sm">
+            <i class="bi bi-house-door"></i> Volver al Inicio
+        </a>
+    </div>
+
+</div>
+
+<style>
+    .error-anim {
+        animation: scaleUp 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+
+    @@keyframes scaleUp {
+        from {
+            opacity: 0;
+            transform: scale(0.9);
+        }
+
+        to {
+            opacity: 1;
+            transform: scale(1);
+        }
+    }
+</style>

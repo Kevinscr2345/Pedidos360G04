@@ -3,27 +3,31 @@
 }
 
 .search-card {
-    background: #f8f9fa;
-    padding: 20px;
+    background: linear-gradient(90deg, rgba(102,178,255,0.08), rgba(13,110,253,0.04));
+    padding: 18px;
     border-radius: 12px;
-    margin-bottom: 25px;
-    box-shadow: 0 6px 15px rgba(0,0,0,0.08);
+    margin-bottom: 20px;
+    box-shadow: 0 6px 15px rgba(78,52,46,0.06);
 }
 
 .table-card {
     background: white;
     border-radius: 12px;
     overflow: hidden;
-    box-shadow: 0 6px 15px rgba(0,0,0,0.08);
+    box-shadow: 0 8px 20px rgba(78,52,46,0.06);
 }
 
 .table-header {
-    background: linear-gradient(135deg,#2a7de1,#1b5fd1);
+    background: linear-gradient(135deg,#0d6efd,#66b2ff);
     color: white;
     padding: 12px 20px;
     display: flex;
     align-items: center;
-    font-weight: 500;
+    font-weight: 600;
     font-size: 16px;
 }
+
+.table-card table thead th { color: var(--color-texto); }
+
+.table-card .btn { border-radius: 6px; }
 

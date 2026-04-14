@@ -9,7 +9,7 @@ using Pedidos360Grupo4.ViewModels;
 
 namespace Pedidos360Grupo4.Controllers
 {
-    [Authorize(Roles = "Admin,Vendedor")]
+    [Authorize(Roles = "Admin,Vendedor,Operaciones")]
     public class PedidosController : Controller
     {
         private readonly DatabaseLogic _context;
@@ -81,16 +81,7 @@ namespace Pedidos360Grupo4.Controllers
                     .ToListAsync()
             };
 
-            ViewBag.Productos = await _context.Productos
-                .Where(p => p.Activo)
-                .OrderBy(p => p.Nombre)
-                .Select(p => new SelectListItem
-                {
-                    Value = p.Id.ToString(),
-                    Text = p.Nombre
-                })
-                .ToListAsync();
-
+            // CORRECCIÓN: Se eliminó la carga masiva de ViewBag.Productos, el FrontEnd usará el API Ajax.
             return View(vm);
         }
 
@@ -104,16 +95,6 @@ namespace Pedidos360Grupo4.Controllers
                 {
                     Value = c.Id.ToString(),
                     Text = c.Nombre + " - " + c.Cedula
-                })
-                .ToListAsync();
-
-            ViewBag.Productos = await _context.Productos
-                .Where(p => p.Activo)
-                .OrderBy(p => p.Nombre)
-                .Select(p => new SelectListItem
-                {
-                    Value = p.Id.ToString(),
-                    Text = p.Nombre
                 })
                 .ToListAsync();
 
@@ -187,6 +168,7 @@ namespace Pedidos360Grupo4.Controllers
                     TotalLinea = Math.Round(totalLinea, 2)
                 });
 
+                // Baja de stock automatica
                 producto.Stock -= linea.Cantidad;
             }
 

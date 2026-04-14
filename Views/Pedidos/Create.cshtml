@@ -5,217 +5,338 @@
     ViewData["Title"] = "Nuevo pedido";
 }
 
-<h1>Registrar pedido</h1>
-<hr />
+<div class="container mt-4 pedido-anim">
 
-<form asp-action="Create" method="post" id="formPedido">
-    <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
-
-    <div class="row mb-4">
-        <div class="col-md-6">
-            <label asp-for="ClienteId" class="form-label"></label>
-            <select asp-for="ClienteId" asp-items="Model.Clientes" class="form-select">
-                <option value="">-- Seleccione un cliente --</option>
-            </select>
-            <span asp-validation-for="ClienteId" class="text-danger"></span>
-        </div>
+    <div class="mb-4">
+        <h2 class="fw-bold" style="color:#1E88E5;">
+            <i class="bi bi-bag-plus"></i> Registrar pedido
+        </h2>
+        <p class="text-muted">Seleccione cliente y agregue productos al pedido</p>
     </div>
 
-    <div class="table-card mb-4">
-        <div class="table-header">
-            <span>Agregar productos</span>
-        </div>
-        <div class="card-body">
-            <div class="row g-2 align-items-end">
-                <div class="col-md-5">
-                    <label class="form-label">Producto</label>
-                    <select id="productoSelect" class="form-select">
-                        <option value="">-- Seleccione un producto --</option>
-                        @foreach (var producto in (IEnumerable<SelectListItem>)ViewBag.Productos)
-                        {
-                            <option value="@producto.Value">@producto.Text</option>
-                        }
+    <form asp-action="Create" method="post" id="formPedido">
+
+        <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+
+        <div class="card shadow-sm border-0 mb-4">
+            <div class="card-body">
+                <label asp-for="ClienteId" class="form-label fw-bold">Cliente</label>
+
+                <div class="input-group">
+                    <span class="input-group-text">
+                        <i class="bi bi-person"></i>
+                    </span>
+
+                    <select asp-for="ClienteId" asp-items="Model.Clientes" class="form-select" required>
+                        <option value="">-- Seleccione un cliente --</option>
                     </select>
                 </div>
 
-                <div class="col-md-3">
-                    <label class="form-label">Cantidad</label>
-                    <input type="number" id="cantidadProducto" class="form-control" min="1" value="1" />
-                </div>
+                <span asp-validation-for="ClienteId" class="text-danger"></span>
+            </div>
+        </div>
 
-                <div class="col-md-2">
-                    <label class="form-label">Descuento %</label>
-                    <input type="number" id="descuentoProducto" class="form-control" min="0" max="100" value="0" />
-                </div>
+        <div class="card shadow-sm border-0 mb-4">
+            <div class="card-header text-white"
+                 style="background-color:#1E88E5;">
+                <i class="bi bi-plus-circle"></i> Agregar productos
+            </div>
 
-                <div class="col-md-2">
-                    <button type="button" id="btnAgregarProducto" class="btn btn-success w-100">Agregar producto</button>
+            <div class="card-body">
+                <div class="row g-3 align-items-end">
+
+                    <div class="col-md-5">
+                        <label class="form-label fw-bold">Buscar Producto</label>
+                        <div class="input-group">
+                            <span class="input-group-text"><i class="bi bi-search"></i></span>
+                            <input type="text" id="buscarProductoAjax" class="form-control" autocomplete="off" list="listaProductosAjax" placeholder="Escriba para buscar..." />
+                            <datalist id="listaProductosAjax"></datalist>
+                        </div>
+                    </div>
+
+                    <div class="col-md-2">
+                        <label class="form-label fw-bold">Cantidad</label>
+                        <input type="number" id="cantidadProducto" class="form-control" min="1" value="1" />
+                    </div>
+
+                    <div class="col-md-2">
+                        <label class="form-label fw-bold">Descuento %</label>
+                        <input type="number" id="descuentoProducto" class="form-control" min="0" max="100" value="0" />
+                    </div>
+
+                    <div class="col-md-3">
+                        <button type="button" id="btnAgregarProducto"
+                                class="btn btn-success w-100 shadow-sm">
+                            <i class="bi bi-cart-plus"></i> Agregar
+                        </button>
+                    </div>
+
                 </div>
             </div>
         </div>
-    </div>
 
-    <div class="table-card mb-4">
-        <div class="table-header">
-            <img src="~/images/logo.png" height="35" />
-            <span>Detalle del pedido</span>
+        <div class="card shadow-lg border-0 mb-4">
+
+            <div class="card-header text-white"
+                 style="background-color:#1E88E5;">
+                <i class="bi bi-receipt"></i> Detalle del pedido
+            </div>
+
+            <div class="table-responsive">
+                <table class="table table-hover align-middle mb-0" id="tablaLineas">
+                    <thead class="table-light">
+                        <tr>
+                            <th>Producto</th>
+                            <th class="text-center">Cantidad</th>
+                            <th class="text-center">Desc %</th>
+                            <th class="text-end">Precio Unit.</th>
+                            <th class="text-center">Imp %</th>
+                            <th class="text-end">Total</th>
+                            <th class="text-center">Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
+            </div>
+
         </div>
 
-    <table class="table table-hover" id="tablaLineas">
-        <thead>
-            <tr>
-                <th>Producto</th>
-                <th>Cantidad</th>
-                <th>Descuento %</th>
-                <th>Precio unitario</th>
-                <th>Impuesto %</th>
-                <th>Total línea</th>
-                <th>Acciones</th>
-            </tr>
-        </thead>
-        <tbody></tbody>
-    </table>
-    </div>
+        <div id="contenedorInputsOcultos"></div>
 
-    <div id="contenedorInputsOcultos"></div>
+        <div class="row">
+            <div class="col-md-4 ms-auto">
 
-    <div class="row mt-3">
-        <div class="col-md-4 ms-auto">
-            <div class="table-card">
-                <div class="table-header">
-                    <span>Totales</span>
+                <div class="card shadow border-0">
+
+                    <div class="card-header text-white"
+                         style="background-color:#1E88E5;">
+                        <i class="bi bi-cash-stack"></i> Totales
+                    </div>
+
+                    <div class="card-body">
+
+                        <div class="d-flex justify-content-between mb-2">
+                            <span class="text-muted">Subtotal:</span>
+                            <span>₡ <span id="subtotalPedido">0.00</span></span>
+                        </div>
+                        <div class="d-flex justify-content-between mb-3">
+                            <span class="text-muted">Impuestos:</span>
+                            <span>₡ <span id="impuestosPedido">0.00</span></span>
+                        </div>
+                        <div class="d-flex justify-content-between align-items-center border-top pt-2">
+                            <span class="fw-bold fs-5">Total:</span>
+                            <span class="fw-bold fs-4 text-primary">₡ <span id="totalPedido">0.00</span></span>
+                        </div>
+
+                    </div>
                 </div>
-                <div class="card-body">
-                    <p><strong>Subtotal:</strong> ₡ <span id="subtotalPedido">0.00</span></p>
-                    <p><strong>Impuestos:</strong> ₡ <span id="impuestosPedido">0.00</span></p>
-                    <p><strong>Total:</strong> ₡ <span id="totalPedido">0.00</span></p>
-                </div>
+
             </div>
         </div>
-    </div>
 
-    <div class="mt-3">
-        <button type="submit" class="btn btn-success">Guardar pedido</button>
-        <a asp-action="Index" class="btn btn-secondary">Cancelar</a>
-    </div>
-</form>
+        <div class="d-flex justify-content-between mt-4">
 
-@section Scripts {
-    @{
-        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+            <a asp-action="Index" class="btn btn-outline-secondary shadow-sm">
+                <i class="bi bi-arrow-left"></i> Cancelar
+            </a>
+
+            <button type="submit"
+                    class="btn text-white shadow-sm"
+                    style="background-color:#1E88E5;">
+                <i class="bi bi-save"></i> Guardar pedido
+            </button>
+
+        </div>
+
+    </form>
+
+</div>
+
+<style>
+    .pedido-anim {
+        animation: fadeUp 0.5s ease;
     }
 
+    @@keyframes fadeUp {
+        from {
+            opacity: 0;
+            transform: translateY(15px);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    .input-group-text {
+        background-color: #f1f3f5;
+    }
+
+    .btn:hover {
+        opacity: 0.9;
+        transition: 0.3s;
+    }
+</style>
+
+@section Scripts {
     <script>
-        let lineasPedido = [];
-        let productosCache = Array.from(document.querySelectorAll("#productoSelect option"))
-            .filter(op => op.value !== "")
-            .map(op => ({
-                id: parseInt(op.value),
-                nombre: op.text
-            }));
+        let lineasDePedido = [];
+        let productosBusquedaCache = []; // Memoria temporal para guardar los objetos devueltos por el API AJAX
 
-        async function recalcularTotales() {
-            const solicitud = {
-                lineas: lineasPedido.map(x => ({
-                    productoId: x.productoId,
-                    cantidad: x.cantidad,
-                    descuento: x.descuento
-                }))
-            };
+        const inputBuscar = document.getElementById('buscarProductoAjax');
+        const datalistAjax = document.getElementById('listaProductosAjax');
 
-            const respuesta = await fetch('/api/pedidos/calcular', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(solicitud)
-            });
+        // 1. Motor de Autosuggest AJAX a la API
+        inputBuscar.addEventListener('input', async function () {
+            const q = this.value;
 
-            const datos = await respuesta.json();
-
-            document.getElementById("subtotalPedido").textContent = (datos.subtotal ?? 0).toFixed(2);
-            document.getElementById("impuestosPedido").textContent = (datos.impuestos ?? 0).toFixed(2);
-            document.getElementById("totalPedido").textContent = (datos.total ?? 0).toFixed(2);
-
-            const tbody = document.querySelector("#tablaLineas tbody");
-            tbody.innerHTML = "";
-
-            lineasPedido.forEach((linea, index) => {
-                const detalle = datos.lineas.find(x => x.productoId === linea.productoId);
-                const fila = document.createElement("tr");
-
-                fila.innerHTML = `
-                    <td>${linea.productoNombre}</td>
-                    <td>${linea.cantidad}</td>
-                    <td>${linea.descuento}%</td>
-                    <td>${detalle ? detalle.precioUnitario.toFixed(2) : "0.00"}</td>
-                    <td>${detalle ? (detalle.impuestoPorcentaje * 100).toFixed(0) + "%" : "0%"}</td>
-                    <td>${detalle ? detalle.totalLinea.toFixed(2) : "0.00"}</td>
-                    <td>
-                        <button type="button" class="btn btn-danger btn-sm" onclick="eliminarLinea(${index})">Quitar</button>
-                    </td>
-                `;
-
-                tbody.appendChild(fila);
-            });
-
-            renderizarInputsOcultos();
-        }
-
-        function renderizarInputsOcultos() {
-            const contenedor = document.getElementById("contenedorInputsOcultos");
-            contenedor.innerHTML = "";
-
-            lineasPedido.forEach((linea, index) => {
-                contenedor.innerHTML += `
-                    <input type="hidden" name="Lineas[${index}].ProductoId" value="${linea.productoId}" />
-                    <input type="hidden" name="Lineas[${index}].ProductoNombre" value="${linea.productoNombre}" />
-                    <input type="hidden" name="Lineas[${index}].Cantidad" value="${linea.cantidad}" />
-                    <input type="hidden" name="Lineas[${index}].Descuento" value="${linea.descuento}" />
-                `;
-            });
-        }
-
-        function eliminarLinea(index) {
-            lineasPedido.splice(index, 1);
-            recalcularTotales();
-        }
-
-        document.getElementById("btnAgregarProducto").addEventListener("click", function () {
-            const productoId = parseInt(document.getElementById("productoSelect").value);
-            const cantidad = parseInt(document.getElementById("cantidadProducto").value);
-            const descuento = parseFloat(document.getElementById("descuentoProducto").value);
-
-            if (!productoId || cantidad <= 0 || descuento < 0 || descuento > 100) {
-                alert("Debes seleccionar un producto y escribir valores válidos.");
+            if (q.length < 2) {
+                datalistAjax.innerHTML = '';
                 return;
             }
 
-            const selectProducto = document.getElementById("productoSelect");
-            const textoProducto = selectProducto.options[selectProducto.selectedIndex]?.text || "";
+            try {
+                const response = await fetch(`/api/productos/buscar?q=${encodeURIComponent(q)}`);
+                if (response.ok) {
+                    productosBusquedaCache = await response.json();
+                    datalistAjax.innerHTML = '';
 
-            const producto = productosCache.find(p => p.id === productoId);
-            if (!producto) {
-                alert("No se encontró el producto seleccionado.");
+                    productosBusquedaCache.forEach(p => {
+                        const option = document.createElement('option');
+                        option.value = p.nombre; // El usuario ve el nombre
+                        datalistAjax.appendChild(option);
+                    });
+                }
+            } catch (error) {
+                console.error("Error buscando productos:", error);
+            }
+        });
+
+        // 2. Evento para agregar a la tabla del pedido
+        document.getElementById('btnAgregarProducto').addEventListener('click', async function () {
+            const nombreSeleccionado = inputBuscar.value;
+            const inputCant = document.getElementById('cantidadProducto');
+            const inputDesc = document.getElementById('descuentoProducto');
+
+            // Encontrar el objeto producto completo a partir de lo que seleccionó el usuario
+            const productoEncontrado = productosBusquedaCache.find(p => p.nombre === nombreSeleccionado);
+
+            if (!productoEncontrado) {
+                alert("Por favor, busque y seleccione un producto válido de la lista.");
                 return;
             }
 
-            const existente = lineasPedido.find(x => x.productoId === productoId);
-            if (existente) {
-                existente.cantidad += cantidad;
-                existente.descuento = descuento;
+            const idProducto = productoEncontrado.id;
+            const nombreProd = productoEncontrado.nombre;
+            const cantidad = parseInt(inputCant.value);
+            const descuento = parseFloat(inputDesc.value) || 0;
+
+            if (cantidad <= 0) {
+                alert("La cantidad debe ser mayor a 0.");
+                return;
+            }
+
+            if (productoEncontrado.stock < cantidad) {
+                alert(`Stock insuficiente. Solo hay ${productoEncontrado.stock} unidades de ${nombreProd}.`);
+                return;
+            }
+
+            const lineaExistente = lineasDePedido.find(l => l.ProductoId === idProducto);
+            if (lineaExistente) {
+                lineaExistente.Cantidad += cantidad;
+                lineaExistente.Descuento = descuento;
             } else {
-                lineasPedido.push({
-                    productoId: producto.id,
-                    productoNombre: textoProducto,
-                    cantidad: cantidad,
-                    descuento: descuento
+                lineasDePedido.push({
+                    ProductoId: idProducto,
+                    Nombre: nombreProd,
+                    Cantidad: cantidad,
+                    Descuento: descuento
                 });
             }
 
-            document.getElementById("cantidadProducto").value = 1;
-            document.getElementById("descuentoProducto").value = 0;
-            document.getElementById("productoSelect").value = "";
+            inputBuscar.value = "";
+            inputCant.value = "1";
+            inputDesc.value = "0";
 
-            recalcularTotales();
+            await procesarCalculosBackend();
         });
+
+        // 3. Conexión con el API Calculadora del Servidor
+        async function procesarCalculosBackend() {
+            if (lineasDePedido.length === 0) {
+                renderizarPantalla(null);
+                return;
+            }
+
+            try {
+                const respuesta = await fetch('/api/pedidos/calcular', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ Lineas: lineasDePedido })
+                });
+
+                if (respuesta.ok) {
+                    const data = await respuesta.json();
+                    renderizarPantalla(data);
+                } else {
+                    alert("Error al calcular con el servidor. Revisa tu conexión.");
+                }
+            } catch (error) {
+                console.error("Error conectando a la API:", error);
+            }
+        }
+
+        // 4. Renderizado dinámico de la tabla y los inputs ocultos para C#
+        function renderizarPantalla(dataApi) {
+            const tbody = document.querySelector('#tablaLineas tbody');
+            const contenedorOculto = document.getElementById('contenedorInputsOcultos');
+
+            tbody.innerHTML = '';
+            contenedorOculto.innerHTML = '';
+
+            if (!dataApi || !dataApi.lineas || dataApi.lineas.length === 0) {
+                document.getElementById('subtotalPedido').innerText = "0.00";
+                document.getElementById('impuestosPedido').innerText = "0.00";
+                document.getElementById('totalPedido').innerText = "0.00";
+                return;
+            }
+
+            dataApi.lineas.forEach((item, index) => {
+                const lineaLocal = lineasDePedido.find(l => l.ProductoId === item.productoId);
+
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td>${lineaLocal.Nombre}</td>
+                    <td class="text-center">${lineaLocal.Cantidad}</td>
+                    <td class="text-center">${lineaLocal.Descuento}%</td>
+                    <td class="text-end">₡ ${item.precioUnitario.toFixed(2)}</td>
+                    <td class="text-center">${item.impuestoPorcentaje}%</td>
+                    <td class="text-end fw-bold text-success">₡ ${item.totalLinea.toFixed(2)}</td>
+                    <td class="text-center">
+                        <button type="button" class="btn btn-sm btn-outline-danger" onclick="eliminarFila(${item.productoId})">
+                            <i class="bi bi-trash"></i>
+                        </button>
+                    </td>
+                `;
+                tbody.appendChild(tr);
+
+                contenedorOculto.innerHTML += `
+                    <input type="hidden" name="Lineas[${index}].ProductoId" value="${lineaLocal.ProductoId}" />
+                    <input type="hidden" name="Lineas[${index}].Cantidad" value="${lineaLocal.Cantidad}" />
+                    <input type="hidden" name="Lineas[${index}].Descuento" value="${lineaLocal.Descuento}" />
+                `;
+            });
+
+            document.getElementById('subtotalPedido').innerText = dataApi.subtotal.toFixed(2);
+            document.getElementById('impuestosPedido').innerText = dataApi.impuestos.toFixed(2);
+            document.getElementById('totalPedido').innerText = dataApi.total.toFixed(2);
+        }
+
+        window.eliminarFila = async function(idProducto) {
+            lineasDePedido = lineasDePedido.filter(l => l.ProductoId !== idProducto);
+            await procesarCalculosBackend();
+        };
     </script>
 }

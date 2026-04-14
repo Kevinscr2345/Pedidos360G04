@@ -1,26 +1,66 @@
 ﻿@using Microsoft.AspNetCore.Identity
 @inject SignInManager<IdentityUser> SignInManager
 
-<ul class="navbar-nav">
+<ul class="navbar-nav align-items-center">
+
     @if (SignInManager.IsSignedIn(User))
     {
-        <li class="nav-item">
-            <span class="nav-link text-dark">
-                Hola, @User.Identity?.Name
+        <li class="nav-item me-2">
+            <span class="nav-link text-white fw-semibold">
+                <i class="bi bi-person-circle"></i> Hola, @User.Identity?.Name
             </span>
         </li>
 
         <li class="nav-item">
             <form asp-controller="Acceso" asp-action="CerrarSesion" method="post" class="d-inline">
                 @Html.AntiForgeryToken()
-                <button type="submit" class="nav-link btn btn-danger text-white border-0">Cerrar sesión</button>
+
+                <button type="submit" class="btn btn-sm logout-btn">
+                    <i class="bi bi-box-arrow-right"></i> Salir
+                </button>
             </form>
         </li>
     }
     else
     {
         <li class="nav-item">
-            <a class="btn btn-primary" asp-controller="Acceso" asp-action="IniciarSesion">Iniciar sesión</a>
+            <a class="btn btn-light login-btn"
+                   asp-controller="Acceso"
+                   asp-action="IniciarSesion">
+                <i class="bi bi-box-arrow-in-right"></i> Iniciar sesión
+            </a>
         </li>
     }
+
 </ul>
+
+<style>
+    .login-btn {
+        font-weight: 500;
+        border-radius: 8px;
+        transition: all 0.25s ease;
+        background: white;
+        color: var(--color-principal);
+    }
+
+    .login-btn:hover {
+        background-color: var(--color-secundario);
+        color: #fff;
+        transform: translateY(-1px);
+    }
+
+    .logout-btn {
+        background-color: white;
+        color: var(--color-principal);
+        border-radius: 8px;
+        border: none;
+        font-weight: 500;
+        transition: all 0.25s ease;
+    }
+
+    .logout-btn:hover {
+        background-color: var(--color-secundario);
+        color: white;
+        transform: translateY(-1px);
+    }
+</style>

@@ -4,59 +4,175 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - Pedidos360</title>
+
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css" />
+    <link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.5.0/css/responsive.dataTables.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
-    <link rel="stylesheet" href="~/css/AcercaDeSistema.css" />
-    <link rel="stylesheet" href="~/css/Login.css" />
-    <link rel="stylesheet" href="~/css/Tablas.css" />
-    <link rel="stylesheet" href="~/Pedidos360Grupo4.styles.css" asp-append-version="true" />
+
+    <style>
+        :root {
+            --color-principal: #0d6efd;
+            --color-secundario: #66b2ff;
+            --color-fondo: #f2f9ff;
+            --color-texto: #0b2545;
+            --color-exito: #198754;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            background-color: var(--color-fondo);
+            color: var(--color-texto);
+        }
+
+        /* Navbar */
+        .site-navbar {
+            background: linear-gradient(90deg, var(--color-principal), var(--color-secundario));
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+        }
+
+        .navbar .nav-link {
+            color: rgba(255,255,255,0.95) !important;
+            font-weight: 500;
+            padding: 8px 12px;
+            border-radius: 8px;
+            transition: all 0.25s ease;
+        }
+
+            .navbar .nav-link:hover {
+                background-color: var(--color-secundario);
+                color: var(--color-texto) !important;
+                transform: translateY(-1px);
+            }
+
+            .navbar .nav-link.active {
+                background-color: #ffffff;
+                color: var(--color-principal) !important;
+                font-weight: 600;
+            }
+
+        .brand-title {
+            color: #FFFFFF;
+            font-weight: bold;
+            font-size: 20px;
+        }
+
+        .navbar-toggler {
+            border: none;
+        }
+
+        .navbar-toggler-icon {
+            filter: brightness(0) invert(1);
+        }
+
+        /* Alertas */
+        .alert {
+            border-radius: 10px;
+        }
+
+        .alert-success {
+            background-color: var(--color-exito);
+            color: white;
+            border: none;
+        }
+
+        /* Contenido */
+        main {
+            animation: fadeIn 0.5s ease;
+        }
+
+        @@keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
+        }
+
+        /* Footer */
+        footer {
+            background: var(--color-principal);
+            color: white;
+            padding: 15px 0;
+            text-align: center;
+            margin-top: 30px;
+        }
+    </style>
+
     <link rel="apple-touch-icon" sizes="180x180" href="~/favicon_io/apple-touch-icon.png">
     <link rel="icon" type="image/png" sizes="32x32" href="~/favicon_io/favicon-32x32.png">
     <link rel="icon" type="image/png" sizes="16x16" href="~/favicon_io/favicon-16x16.png">
 </head>
-<body>
-    <header>
-        <nav class="navbar navbar-expand-sm navbar-light bg-white border-bottom box-shadow mb-3">
-            <div class="container-fluid">
-                <a class="navbar-brand" asp-controller="Home" asp-action="Index">
-                   <img src="~/images/logo.png" alt="logo" width="60" height="60" class="me-2">
-                    Pedidos360</a>
 
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#menuPrincipal">
+<body class="d-flex flex-column min-vh-100">
+
+    <header>
+        <nav class="navbar navbar-expand-sm site-navbar mb-3">
+            <div class="container-fluid">
+                <a class="navbar-brand d-flex align-items-center" asp-controller="Home" asp-action="Index">
+                    <img src="~/images/logo.png" width="45" class="me-2">
+                    <span class="brand-title">Pedidos360</span>
+                </a>
+
+                <button class="navbar-toggler bg-light" type="button" data-bs-toggle="collapse" data-bs-target="#menuPrincipal">
                     <span class="navbar-toggler-icon"></span>
                 </button>
 
                 <div class="collapse navbar-collapse" id="menuPrincipal">
                     <ul class="navbar-nav me-auto">
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-controller="Home" asp-action="Index">Inicio</a>
+                            <a class="nav-link @(ViewContext.RouteData.Values["Action"]?.ToString() == "Index" ? "active" : "")"
+                               asp-controller="Home" asp-action="Index">
+                                <i class="bi bi-house-door"></i> Inicio
+                            </a>
                         </li>
 
                         @if (User.Identity != null && User.Identity.IsAuthenticated)
                         {
                             <li class="nav-item">
-                                <a class="nav-link text-dark" asp-controller="Clientes" asp-action="Index">Clientes</a>
+                                <a class="nav-link @(ViewContext.RouteData.Values["Controller"]?.ToString() == "Clientes" ? "active" : "")"
+                                   asp-controller="Clientes" asp-action="Index">
+                                    <i class="bi bi-people"></i> Clientes
+                                </a>
                             </li>
 
                             <li class="nav-item">
-                                <a class="nav-link text-dark" asp-controller="Pedidos" asp-action="Index">Pedidos</a>
+                                <a class="nav-link @(ViewContext.RouteData.Values["Controller"]?.ToString() == "Pedidos" ? "active" : "")"
+                                   asp-controller="Pedidos" asp-action="Index">
+                                    <i class="bi bi-bag-check"></i> Pedidos
+                                </a>
                             </li>
 
                             <li class="nav-item">
-                                <a class="nav-link text-dark" asp-controller="Productos" asp-action="Index">Productos</a>
+                                <a class="nav-link @(ViewContext.RouteData.Values["Controller"]?.ToString() == "Productos" ? "active" : "")"
+                                   asp-controller="Productos" asp-action="Index">
+                                    <i class="bi bi-box-seam"></i> Productos
+                                </a>
                             </li>
                         }
 
                         @if (User.IsInRole("Admin"))
                         {
                             <li class="nav-item">
-                                <a class="nav-link text-dark" asp-controller="Home" asp-action="Administracion">Administración</a>
+                                <a class="nav-link @(ViewContext.RouteData.Values["Action"]?.ToString() == "Administracion" ? "active" : "")"
+                                   asp-controller="Home" asp-action="Administracion">
+                                    <i class="bi bi-gear"></i> Administración
+                                </a>
                             </li>
                         }
                         else
                         {
                             <li class="nav-item">
-                                <a class="nav-link text-dark" asp-controller="Home" asp-action="Privacy">Acerca del sistema</a>
+                                <a class="nav-link @(ViewContext.RouteData.Values["Action"]?.ToString() == "Privacy" ? "active" : "")"
+                                   asp-controller="Home" asp-action="Privacy">
+                                    <i class="bi bi-info-circle"></i> Acerca del sistema
+                                </a>
                             </li>
                         }
                     </ul>
@@ -67,19 +183,20 @@
         </nav>
     </header>
 
-    <div class="container">
+    <div class="container flex-grow-1">
+
         @if (TempData["Exito"] != null)
         {
-            <div class="alert alert-success alert-dismissible fade show" role="alert">
-                @TempData["Exito"]
+            <div id="alertaExito" class="alert alert-success alert-dismissible fade show shadow-sm">
+                <i class="bi bi-check-circle"></i> @TempData["Exito"]
                 <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
             </div>
         }
 
         @if (TempData["Error"] != null)
         {
-            <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                @TempData["Error"]
+            <div id="alertaError" class="alert alert-danger alert-dismissible fade show shadow-sm">
+                <i class="bi bi-x-circle"></i> @TempData["Error"]
                 <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
             </div>
         }
@@ -89,15 +206,41 @@
         </main>
     </div>
 
-    <footer class="border-top footer text-muted mt-4">
+    <footer class="mt-auto">
         <div class="container">
-            &copy; 2026 - Pedidos360
+            2026 - Pedidos360 | Sistema de gestión
         </div>
     </footer>
 
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/responsive/2.5.0/js/dataTables.responsive.min.js"></script>
+
     <script src="~/js/site.js" asp-append-version="true"></script>
+    <script src="~/js/datatables-init.js" asp-append-version="true"></script>
+
+    <script>
+        setTimeout(() => {
+            let exito = document.getElementById("alertaExito");
+            let error = document.getElementById("alertaError");
+
+            if (exito) {
+                exito.style.transition = "opacity 0.5s";
+                exito.style.opacity = "0";
+                setTimeout(() => exito.remove(), 500);
+            }
+
+            if (error) {
+                error.style.transition = "opacity 0.5s";
+                error.style.opacity = "0";
+                setTimeout(() => error.remove(), 500);
+            }
+        }, 4000);
+    </script>
+
     @await RenderSectionAsync("Scripts", required: false)
+
 </body>
 </html>

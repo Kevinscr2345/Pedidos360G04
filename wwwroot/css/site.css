@@ -1,81 +1,83 @@
-html {
-  font-size: 14px;
+/* Updated site styles with brand palette */
+:root{
+    --color-principal: #0d6efd; /* primary blue */
+    --color-secundario: #66b2ff; /* lighter blue */
+    --color-fondo: #f2f9ff; /* very light blue background */
+    --color-texto: #0b2545; /* dark blue text */
+    --color-exito: #198754; /* bootstrap success green */
 }
 
-@media (min-width: 768px) {
-  html {
-    font-size: 16px;
-  }
-}
+html { font-size: 14px; }
+@media (min-width: 768px) { html { font-size: 16px; } }
 
 .btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
-  box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
+  box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem var(--color-secundario);
 }
 
-html {
-  position: relative;
-  min-height: 100%;
-}
+html { position: relative; min-height: 100%; }
 
 body {
-    background: #f5f7fb;
-    color: #1f2937;
+    background: var(--color-fondo);
+    color: var(--color-texto);
     margin-bottom: 60px;
+    font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
 }
 
-
-
 .btn-primary {
-    background: #2563eb;
+    background: var(--color-principal);
     border: none;
     border-radius: 8px;
     padding: 10px 18px;
+    color: white;
+}
+.btn-primary:hover { background: #e67600; }
+
+.btn-success {
+    background: var(--color-exito);
+    border: none;
+    color: white;
 }
 
-    .btn-primary:hover {
-        background: #1d4ed8;
-    }
+.navbar-brand { font-weight: 600; color: var(--color-texto) !important; }
 
-.dispaly-4{
-    font-weight:600;
-}
-
-.home-container {
-    max-width: 800px;
-    margin: 40px auto;
-}
-
-.home-title {
-    text-align: center;
-    margin-bottom: 25px;
-}
-
-.home-card {
+.card, .home-card, .admin-card {
+    border: none;
+    border-radius: 12px;
+    box-shadow: 0 6px 20px rgba(78,52,46,0.08);
     background: white;
-    padding: 12px 10px;
-    text-align: center;
-    border-radius: 10px;
-    box-shadow: 0 8px 20px rgba(0,0,0,0.08);
-
 }
 
-.card {
-    border: none;
-    border-radius: 12px;
-    box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+.display-4{ font-weight:600; }
+
+.home-container { max-width: 900px; margin: 40px auto; }
+
+.home-title { text-align: center; margin-bottom: 25px; }
+
+.home-card { background: white; padding: 12px 10px; text-align: center; border-radius: 10px; box-shadow: 0 8px 20px rgba(78,52,46,0.06); }
+
+.card { border: none; border-radius: 12px; box-shadow: 0 8px 20px rgba(78,52,46,0.06); }
+
+.admin-card { border: none; border-radius: 12px; box-shadow: 0 6px 15px rgba(78,52,46,0.06); transition: 0.5s; }
+.admin-card:hover { transform: translateY(-10px); }
+
+select.estado { min-width: 150px; }
+
+/* Navbar and footer branding */
+.site-navbar {
+    background: linear-gradient(90deg, var(--color-principal), var(--color-secundario));
+    color: white;
+    padding: 0.5rem 1rem;
+}
+.site-navbar .nav-link {
+    color: rgba(255,255,255,0.95) !important;
+    margin-right: 0.4rem;
+}
+.brand-title { font-weight: 700; color: white; font-size: 1.15rem; }
+
+.footer {
+    background: linear-gradient(90deg, rgba(251,140,0,0.06), transparent);
+    color: var(--color-texto);
+    padding: 1rem 0;
 }
 
-.admin-card {
-    border: none;
-    border-radius: 12px;
-    box-shadow: 0 6px 15px rgba(0,0,0,0.08);
-    transition: 0.5s;
-}
-
-    .admin-card:hover {
-        transform: translateY(-10px);
-    }
-
-select.estado {
-    min-width: 150px;
-}
+.container { max-width: 1100px; }

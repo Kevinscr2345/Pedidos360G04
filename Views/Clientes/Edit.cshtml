@@ -4,53 +4,139 @@
     ViewData["Title"] = "Editar cliente";
 }
 
-<h1>Editar cliente</h1>
-<hr />
+<div class="container mt-4 cliente-anim">
 
-<div class="row">
-    <div class="col-md-6">
-        <form asp-action="Edit">
-            <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
-            <input type="hidden" asp-for="Id" />
-
-            <div class="form-group mb-3">
-                <label asp-for="Nombre" class="control-label"></label>
-                <input asp-for="Nombre" class="form-control" />
-                <span asp-validation-for="Nombre" class="text-danger"></span>
-            </div>
-
-            <div class="form-group mb-3">
-                <label asp-for="Cedula" class="control-label"></label>
-                <input asp-for="Cedula" class="form-control" />
-                <span asp-validation-for="Cedula" class="text-danger"></span>
-            </div>
-
-            <div class="form-group mb-3">
-                <label asp-for="Correo" class="control-label"></label>
-                <input asp-for="Correo" class="form-control" />
-                <span asp-validation-for="Correo" class="text-danger"></span>
-            </div>
-
-            <div class="form-group mb-3">
-                <label asp-for="Telefono" class="control-label"></label>
-                <input asp-for="Telefono" class="form-control" />
-                <span asp-validation-for="Telefono" class="text-danger"></span>
-            </div>
-
-            <div class="form-group mb-3">
-                <label asp-for="Direccion" class="control-label"></label>
-                <textarea asp-for="Direccion" class="form-control"></textarea>
-                <span asp-validation-for="Direccion" class="text-danger"></span>
-            </div>
-
-            <button type="submit" class="btn btn-primary">Guardar cambios</button>
-            <a asp-action="Index" class="btn btn-secondary">Cancelar</a>
-        </form>
+    <!-- TÍTULO -->
+    <div class="text-center mb-4">
+        <h2 class="fw-bold" style="color:#1E88E5;">
+            <i class="bi bi-pencil-square"></i> Editar cliente
+        </h2>
+        <p class="text-muted">Modifique la información del cliente</p>
     </div>
+
+    <!-- FORM -->
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+
+            <div class="card shadow-lg border-0" style="border-radius:15px;">
+                <div class="card-body p-4">
+
+                    <form asp-action="Edit">
+
+                        <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+                        <input type="hidden" asp-for="Id" />
+
+                        <!-- NOMBRE -->
+                        <div class="mb-3">
+                            <label asp-for="Nombre" class="form-label"></label>
+                            <div class="input-group">
+                                <span class="input-group-text"><i class="bi bi-person"></i></span>
+                                <input asp-for="Nombre" class="form-control" oninput="SoloLetras(this)" />
+                            </div>
+                            <span asp-validation-for="Nombre" class="text-danger"></span>
+                        </div>
+
+                        <!-- CEDULA -->
+                        <div class="mb-3">
+                            <label asp-for="Cedula" class="form-label"></label>
+                            <div class="input-group">
+                                <span class="input-group-text"><i class="bi bi-credit-card"></i></span>
+                                <input asp-for="Cedula" class="form-control" maxlength="9" oninput="SoloNumeros(this)" />
+                            </div>
+                            <span asp-validation-for="Cedula" class="text-danger"></span>
+                        </div>
+
+                        <!-- CORREO -->
+                        <div class="mb-3">
+                            <label asp-for="Correo" class="form-label"></label>
+                            <div class="input-group">
+                                <span class="input-group-text"><i class="bi bi-envelope"></i></span>
+                                <input asp-for="Correo" class="form-control" />
+                            </div>
+                            <span asp-validation-for="Correo" class="text-danger"></span>
+                        </div>
+
+                        <!-- TELÉFONO -->
+                        <div class="mb-3">
+                            <label asp-for="Telefono" class="form-label"></label>
+                            <div class="input-group">
+                                <span class="input-group-text"><i class="bi bi-telephone"></i></span>
+                                <input asp-for="Telefono" class="form-control" maxlength="8" oninput="SoloNumeros(this)" />
+                            </div>
+                            <span asp-validation-for="Telefono" class="text-danger"></span>
+                        </div>
+
+                        <!-- DIRECCIÓN -->
+                        <div class="mb-3">
+                            <label asp-for="Direccion" class="form-label"></label>
+                            <textarea asp-for="Direccion" class="form-control"></textarea>
+                            <span asp-validation-for="Direccion" class="text-danger"></span>
+                        </div>
+
+                        <!-- BOTONES -->
+                        <div class="d-flex justify-content-between mt-4">
+
+                            <a asp-action="Index" class="btn btn-outline-secondary">
+                                <i class="bi bi-arrow-left"></i> Cancelar
+                            </a>
+
+                            <button type="submit"
+                                    class="btn text-white"
+                                    style="background-color:#1E88E5;">
+                                <i class="bi bi-save"></i> Guardar cambios
+                            </button>
+
+                        </div>
+
+                    </form>
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+
 </div>
+
+<!-- ESTILOS -->
+<style>
+    .cliente-anim {
+        animation: fadeUp 0.5s ease;
+    }
+
+    @@keyframes fadeUp {
+        from {
+            opacity: 0;
+            transform: translateY(15px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    .input-group-text {
+        background-color: #f1f3f5;
+    }
+
+    .btn:hover {
+        opacity: 0.9;
+        transition: 0.3s;
+    }
+</style>
 
 @section Scripts {
     @{
         await Html.RenderPartialAsync("_ValidationScriptsPartial");
     }
+
+    <script>
+        function SoloLetras(input){
+            input.value = input.value.replace(/[^a-zA-ZáéíóúÁÉÍÓÚñÑ\s]/g, '');
+        }
+
+        function SoloNumeros(input){
+            input.value = input.value.replace(/[^0-9]/g, '');
+        }
+    </script>
 }

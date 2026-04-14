@@ -4,75 +4,193 @@
     ViewData["Title"] = "Clientes";
 }
 
-<h1 class="page-tit">Clientes</h1>
+<div class="container mt-4 cliente-anim">
 
-<div class="search-card">
-    <form asp-action="Index" method="get" class="row g-2 align-items-center">
-        <div class="col-md-8">
-            <input type="text" name="searchString" value="@ViewBag.CurrentFilter" class="form-control" placeholder="Buscar por nombre o cédula..." />
-        </div>
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="fw-bold" style="color:#1E88E5;">
+            <i class="bi bi-people-fill"></i> Clientes
+        </h2>
 
-        <div class="col-md-4 text-md-end">
-            <button type="submit" class="btn btn-success me-2">Buscar</button>
-            <a asp-action="Index" class="btn btn-outline-secondary">Limpiar</a>
-        </div>
-    </form>
-</div>
-
-<div class="mb-3">
-    <a asp-action="Create" class="btn btn-primary">Nuevo cliente</a>
-</div>
-
-<div class="table-card">
-    <div class="table-header">
-        <img src="~/images/Logo.png" height="35">
-        <span>Lista de clientes</span>
+        <a asp-action="Create" class="btn text-white"
+           style="background-color:#1E88E5;">
+            <i class="bi bi-person-plus"></i> Nuevo cliente
+        </a>
     </div>
-    <table class="table table-hover align-middle">
-        <thead>
-            <tr>
-                <th>Nombre completo</th>
-                <th>Cédula</th>
-                <th>Correo electrónico</th>
-                <th>Teléfono</th>
-                <th>Dirección</th>
-                <th style="min-width:220px;">Acciones</th>
-            </tr>
-        </thead>
 
-        <tbody>
-            @foreach (var item in Model)
+    <div class="card shadow-sm border-0 mb-4">
+        <div class="card-body">
+            <form asp-action="Index" method="get" class="row g-2">
+
+                <div class="col-md-8">
+                    <div class="input-group">
+                        <span class="input-group-text">
+                            <i class="bi bi-search"></i>
+                        </span>
+
+                        <input type="text" name="searchString"
+                               id="searchInput"
+                               value="@ViewBag.CurrentFilter"
+                               class="form-control"
+                               autocomplete="off"
+                               list="listaSugerencias"
+                               placeholder="Buscar por nombre o cédula..." />
+
+                        <datalist id="listaSugerencias"></datalist>
+                    </div>
+                </div>
+
+                <div class="col-md-4 text-md-end">
+                    <button type="submit" class="btn btn-success me-2">
+                        <i class="bi bi-search"></i> Buscar
+                    </button>
+
+                    <a asp-action="Index" class="btn btn-outline-secondary">
+                        <i class="bi bi-x-circle"></i> Limpiar
+                    </a>
+                </div>
+
+            </form>
+        </div>
+    </div>
+
+    <div class="card shadow-lg border-0">
+
+        <div class="card-header text-white"
+             style="background-color:#1E88E5;">
+            <i class="bi bi-table"></i> Lista de clientes
+        </div>
+
+        <div class="table-responsive">
+            <table class="table table-hover align-middle mb-0">
+
+                <thead class="table-light">
+                    <tr>
+                        <th>Nombre</th>
+                        <th>Cédula</th>
+                        <th>Correo</th>
+                        <th>Teléfono</th>
+                        <th>Dirección</th>
+                        <th class="text-center" style="min-width:200px;">Acciones</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>@item.Nombre</td>
+                            <td>@item.Cedula</td>
+                            <td>@item.Correo</td>
+                            <td>@item.Telefono</td>
+                            <td>@item.Direccion</td>
+
+                            <td class="text-center">
+
+                                <a asp-action="Details" asp-route-id="@item.Id"
+                                   class="btn btn-sm btn-info me-1">
+                                    <i class="bi bi-eye"></i>
+                                </a>
+
+                                @if (User.IsInRole("Admin"))
+                                {
+                                    <a asp-action="Edit" asp-route-id="@item.Id"
+                                       class="btn btn-sm btn-warning me-1">
+                                        <i class="bi bi-pencil"></i>
+                                    </a>
+
+                                    <a asp-action="Delete" asp-route-id="@item.Id"
+                                       class="btn btn-sm btn-danger">
+                                        <i class="bi bi-trash"></i>
+                                    </a>
+                                }
+
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+
+            </table>
+        </div>
+    </div>
+
+    <nav class="mt-4">
+        <ul class="pagination justify-content-center">
+
+            @for (int i = 1; i <= ViewBag.TotalPages; i++)
             {
-                <tr>
-                    <td>@item.Nombre</td>
-                    <td>@item.Cedula</td>
-                    <td>@item.Correo</td>
-                    <td>@item.Telefono</td>
-                    <td>@item.Direccion</td>
-                    <td>
-
-                        <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-info btn-sm me-1">Detalles</a>
-
-                        @if (User.IsInRole("Admin"))
-                            {
-                            <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-warning btn-sm me-1">Editar</a>
-                            <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-danger btn-sm">Eliminar</a>
-                        }
-
-                    </td>
-                </tr>
+                <li class="page-item @(i == ViewBag.PageIndex ? "active" : "")">
+                    <a class="page-link"
+                       href="@Url.Action("Index", new { pageNumber = i, searchString = ViewBag.CurrentFilter })">
+                        @i
+                    </a>
+                </li>
             }
-        </tbody>
-    </table>
+
+        </ul>
+    </nav>
+
 </div>
 
-<nav class="mt-4">
-    <ul class="pagination justify-content-center">
-        @for (int i = 1; i <= ViewBag.TotalPages; i++)
-        {
-            <li class="page-item @(i == ViewBag.PageIndex ? "active" : "")">
-                <a class="page-link" href="@Url.Action("Index", new { pageNumber = i, searchString = ViewBag.CurrentFilter })">@i</a>
-            </li>
+<style>
+    .cliente-anim {
+        animation: fadeUp 0.5s ease;
+    }
+
+    @@keyframes fadeUp {
+        from {
+            opacity: 0;
+            transform: translateY(15px);
         }
-    </ul>
-</nav>
+
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    .table td, .table th {
+        vertical-align: middle;
+    }
+
+    .btn:hover {
+        opacity: 0.9;
+        transition: 0.3s;
+    }
+</style>
+
+@section Scripts {
+    <script>
+        const searchInput = document.getElementById('searchInput');
+        const listaSugerencias = document.getElementById('listaSugerencias');
+
+        searchInput.addEventListener('input', async function () {
+            const term = this.value;
+
+            // Comenzar a buscar solo a partir de 2 caracteres escritos para no saturar el servidor
+            if (term.length < 2) {
+                listaSugerencias.innerHTML = '';
+                return;
+            }
+
+            try {
+                // Se conecta al endpoint GetSugerencias de ClientesController
+                const response = await fetch(`/Clientes/GetSugerencias?term=${encodeURIComponent(term)}`);
+                if (response.ok) {
+                    const data = await response.json();
+
+                    // Limpiamos la lista actual antes de poner las nuevas opciones
+                    listaSugerencias.innerHTML = '';
+
+                    // Agregamos cada coincidencia al datalist
+                    data.forEach(item => {
+                        const option = document.createElement('option');
+                        option.value = item.nombre;
+                        listaSugerencias.appendChild(option);
+                    });
+                }
+            } catch (error) {
+                console.error('Error al obtener las sugerencias:', error);
+            }
+        });
+    </script>
+}

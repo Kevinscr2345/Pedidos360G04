@@ -4,111 +4,188 @@
     ViewData["Title"] = "Detalle del pedido";
 }
 
-<h1 class="page-title">Detalle del pedido #@Model.Id</h1>
-<div class="table-card mb-4">
+<div class="container mt-4 pedido-anim">
 
-    <div class="table-header">
-        <img src="~/images/logo.png" height="35" />
-        <span>Información del pedido</span>
-    </div>
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="fw-bold" style="color:#1E88E5;">
+            <i class="bi bi-receipt"></i> Pedido #@Model.Id
+        </h2>
 
-    <div class="card-body">
-
-    <div class="row text-center">
-
-        <div class="col-md-4">
-            <small class="text-muted">Cliente</small>
-            <p class="fw-semibold mb-0">@Model.Cliente.Nombre</p>
+        <div>
+            <button class="btn btn-danger me-2 shadow-sm" onclick="exportarPDF()">
+                <i class="bi bi-file-earmark-pdf"></i> Exportar a PDF
+            </button>
+            <a asp-action="Index" class="btn btn-outline-secondary shadow-sm">
+                <i class="bi bi-arrow-left"></i> Volver
+            </a>
         </div>
-
-        <div class="col-md-4">
-            <small class="text-muted">Fecha</small>
-            <p class="mb-0">@Model.Fecha.ToString("dd/MM/yyyy HH:mm")</p>
-        </div>
-
-            <div class="col-md-4">
-                <small class="text-muted">Estado</small>
-
-                @if (User.IsInRole("Admin"))
-                {
-                    <form asp-action="CambiarEstado" method="post" class="mt-1 d-flex gap-2">
-
-                        <input type="hidden" name="id" value="@Model.Id" />
-
-                        <select name="nuevoEstado" class="form-select estado w-auto" onchange="this.form.submit()">
-
-                            <option value="@EstadosPedido.Registrado"
-                            selected="@(Model.Estado == EstadosPedido.Registrado)">Registrado</option>
-
-                            <option value="@EstadosPedido.EnProceso"
-                            selected="@(Model.Estado == EstadosPedido.EnProceso)">En proceso</option>
-
-                            <option value="@EstadosPedido.Completado"
-                            selected="@(Model.Estado == EstadosPedido.Completado)">Completado</option>
-
-                            <option value="@EstadosPedido.Cancelado"selected="@(Model.Estado == EstadosPedido.Cancelado)">Cancelado</option>
-
-                        </select>
-
-                        <button type="submit" class="btn btn-primary btn-sm">Guardar</button>
-
-                    </form>
-                }
-                else
-                {
-                 <p class="mb-0">@Model.Estado</p>
-                }
-            </div>
     </div>
-</div>
-</div>
 
-<div class="table-card mb-4">
-    <div class="table-header">
-        <span>Productos del pedido</span>
-    </div>
-    <table class="table table-hover align-middle">
-        <thead>
-            <tr>
-                <th>Producto</th>
-                <th>Cantidad</th>
-                <th>Precio unitario</th>
-                <th>Descuento (%)</th>
-                <th>Impuesto (%)</th>
-                <th>Total línea</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var item in Model.Detalles)
-            {
-                <tr>
-                    <td>@item.Producto.Nombre</td>
-                    <td>@item.Cantidad</td>
-                    <td>₡ @item.PrecioUnit.ToString("N2")</td>
-                    <td>@item.Descuento.ToString("N0")%</td>
-                    <td>@item.ImpuestoPorc.ToString("P0")</td>
-                    <td><strong>₡ @item.TotalLinea.ToString("N2")</strong></td>
-                </tr>
-            }
-        </tbody>
-    </table>
-</div>
+    <div id="documentoPdf" class="bg-white p-3 rounded">
 
-<div class="row justify-content-end">
-    <div class="col-md-4">
-        <div class="table-card">
-            <div class="table-header">
-                <span>Totales</span>
-            </div>
+        <div class="card shadow-sm border-0 mb-4">
             <div class="card-body">
-                <p><strong>Subtotal:</strong> ₡ @Model.Subtotal.ToString("N2")</p>
-                <p><strong>Impuestos:</strong> ₡ @Model.Impuestos.ToString("N2")</p>
-                <hr /><p class="fs-5"><strong>Total:</strong> ₡ @Model.Total.ToString("N2")</p>
+                <div class="row text-center">
+
+                    <div class="col-md-4 border-end">
+                        <i class="bi bi-person fs-3 text-primary"></i>
+                        <p class="text-muted mb-1">Cliente</p>
+                        <p class="fw-semibold mb-0">@Model.Cliente.Nombre</p>
+                    </div>
+
+                    <div class="col-md-4 border-end">
+                        <i class="bi bi-calendar fs-3 text-primary"></i>
+                        <p class="text-muted mb-1">Fecha</p>
+                        <p class="mb-0">@Model.Fecha.ToString("dd/MM/yyyy HH:mm")</p>
+                    </div>
+
+                    <div class="col-md-4">
+                        <i class="bi bi-gear fs-3 text-primary"></i>
+                        <p class="text-muted mb-1">Estado</p>
+
+                        @if (User.IsInRole("Admin"))
+                        {
+                            <form asp-action="CambiarEstado" method="post" class="d-flex justify-content-center gap-2 html2pdf-ignore">
+                                <input type="hidden" name="id" value="@Model.Id" />
+
+                                <select name="nuevoEstado" class="form-select w-auto" onchange="this.form.submit()">
+                                    <option value="Registrado" selected="@(Model.Estado == "Registrado" ? "selected" : null)">Registrado</option>
+                                    <option value="En Proceso" selected="@(Model.Estado == "En Proceso" ? "selected" : null)">En proceso</option>
+                                    <option value="Completado" selected="@(Model.Estado == "Completado" ? "selected" : null)">Completado</option>
+                                    <option value="Cancelado" selected="@(Model.Estado == "Cancelado" ? "selected" : null)">Cancelado</option>
+                                </select>
+                            </form>
+                            <p class="fw-bold d-none d-print-block">@Model.Estado</p>
+                        }
+                        else
+                        {
+                            <p class="fw-bold mb-0">@Model.Estado</p>
+                        }
+                    </div>
+
+                </div>
             </div>
         </div>
+
+        <div class="card shadow border-0 mb-4">
+            <div class="card-header text-white" style="background-color:#1E88E5;">
+                <i class="bi bi-box-seam"></i> Productos del pedido
+            </div>
+
+            <div class="table-responsive">
+                <table class="table table-hover align-middle mb-0">
+                    <thead class="table-light">
+                        <tr>
+                            <th>Producto</th>
+                            <th class="text-center">Cantidad</th>
+                            <th class="text-end">Precio Base</th>
+                            <th class="text-center">Desc %</th>
+                            <th class="text-center">Imp %</th>
+                            <th class="text-end">Total Lína</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (Model.Detalles != null && Model.Detalles.Any())
+                        {
+                            foreach (var item in Model.Detalles)
+                            {
+                                <tr>
+                                    <td>@item.Producto.Nombre</td>
+                                    <td class="text-center">@item.Cantidad</td>
+                                    <td class="text-end">₡ @item.PrecioUnit.ToString("N2")</td>
+                                    <td class="text-center">@item.Descuento.ToString("N0")%</td>
+                                    <td class="text-center">@item.ImpuestoPorc.ToString("N0")%</td>
+                                    <td class="fw-bold text-success text-end">₡ @item.TotalLinea.ToString("N2")</td>
+                                </tr>
+                            }
+                        }
+                        else
+                        {
+                            <tr>
+                                <td colspan="6" class="text-center text-muted py-3">No hay productos registrados en este pedido.</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="row justify-content-end">
+            <div class="col-md-5">
+                <div class="card shadow border-0">
+                    <div class="card-header text-white" style="background-color:#1E88E5;">
+                        <i class="bi bi-cash-stack"></i> Resumen Financiero
+                    </div>
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between">
+                            <span class="text-muted">Subtotal:</span>
+                            <span>₡ @Model.Subtotal.ToString("N2")</span>
+                        </div>
+                        <div class="d-flex justify-content-between mt-2">
+                            <span class="text-muted">Impuestos:</span>
+                            <span>₡ @Model.Impuestos.ToString("N2")</span>
+                        </div>
+                        <hr />
+                        <div class="d-flex justify-content-between align-items-center">
+                            <span class="fw-bold fs-5">Total:</span>
+                            <span class="fw-bold fs-4 text-primary">₡ @Model.Total.ToString("N2")</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
     </div>
 </div>
 
-<div class="mt-4">
-    <a asp-action="Index" class="btn btn-secondary">Volver</a>
-</div>
+<style>
+    .pedido-anim {
+        animation: fadeUp 0.4s ease;
+    }
+
+    @@keyframes fadeUp {
+        from {
+            opacity: 0;
+            transform: translateY(10px);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    /* Reglas para imprimir/pdf */
+    @@media print {
+        .html2pdf-ignore {
+            display: none !important;
+        }
+
+        .d-print-block {
+            display: block !important;
+        }
+    }
+</style>
+
+@section Scripts {
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <script>
+        function exportarPDF() {
+            // Selecciona todo el contenedor que armamos
+            const elemento = document.getElementById('documentoPdf');
+
+            // Opciones de formato
+            const opt = {
+                margin:       [10, 10, 10, 10],
+                // CORRECCIÓN ERROR CS1061: Se aisló Model.Id entre paréntesis
+                filename:     'Pedido_@(Model.Id).pdf',
+                image:        { type: 'jpeg', quality: 1 },
+                html2canvas:  { scale: 2, useCORS: true },
+                jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
+            };
+
+            // Ejecuta la librería y guarda el archivo
+            html2pdf().set(opt).from(elemento).save();
+        }
+    </script>
+}
